@@ -2,7 +2,6 @@
  * PageTable.h
  *
  *  Created on: Feb 16, 2017
- *      Author: therangersolid
  */
 
 #ifndef PAGETABLE_H_

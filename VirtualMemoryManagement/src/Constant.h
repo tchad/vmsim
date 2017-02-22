@@ -2,7 +2,6 @@
  * Constant.h
  *
  *  Created on: Feb 16, 2017
- *      Author: therangersolid
  */
 
 #ifndef CONSTANT_H_
