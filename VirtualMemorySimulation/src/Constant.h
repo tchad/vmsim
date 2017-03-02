@@ -12,6 +12,10 @@
  */
 #define PAGE_TABLE_ENTRY 256
 
+/**
+ * You cannot change the TLB_ENTRY, otherwise you need to
+ * change the length of unsigned short validMarker; in the TLB.h
+ */
 #define TLB_ENTRY 16
 
 /*
