@@ -6,19 +6,23 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
+#include "TLB.h"
 #include <iostream>
+#include <thread>
+#include <mutex>
 using namespace std;
 
 bool passCheck();
-unsigned char getPageNumber(int logicalAddress);
-unsigned char getOffsetNumber(int logicalAddress);
+bool init();
+unsigned char getPageNumber(unsigned int logicalAddress);
+unsigned char getOffsetNumber(unsigned int logicalAddress);
 
 int main() {
-	if (passCheck()) {
+	if (passCheck()&&init()) {
 		/**
 		 * Put your code here folks.
 		 */
-		int logicalAddress = 576230045;
+		unsigned int logicalAddress = 576230045;
 		// The int casting below is just for display!
 		cout << (int) getPageNumber(logicalAddress) << endl;
 		cout << (int) getOffsetNumber(logicalAddress) << endl;
@@ -49,16 +53,28 @@ bool passCheck() {
 	return true;
 }
 
+TLB tlb;
+bool init() {
+	return true;
+}
 /**
  * Return PageNumber
  */
-unsigned char getPageNumber(int logicalAddress) {
+unsigned char getPageNumber(unsigned int logicalAddress) {
 	return (unsigned char) ((logicalAddress & (0xff << 8)) >> 8);
 }
 
 /**
  * Return Offset
  */
-unsigned char getOffsetNumber(int logicalAddress) {
+unsigned char getOffsetNumber(unsigned int logicalAddress) {
 	return (unsigned char) (logicalAddress & 0xff);
+}
+
+CharResult getFrameNumber(unsigned int pageNumber) {
+	CharResult fromTLB;
+	tlb.getFrameNumber(pageNumber);
+	std::thread t1();
+	CharResult charResult;
+	return charResult;
 }

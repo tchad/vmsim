@@ -7,7 +7,7 @@
 
 #ifndef TLB_H_
 #define TLB_H_
-
+#include "Constant.h"
 class CharResult {
 public:
 	unsigned char result;
