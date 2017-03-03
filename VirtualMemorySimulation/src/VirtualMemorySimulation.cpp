@@ -16,9 +16,9 @@ bool passCheck();
 bool init();
 unsigned char getPageNumber(unsigned int logicalAddress);
 unsigned char getOffsetNumber(unsigned int logicalAddress);
-
+void internalGetFrameNumber(const unsigned int pageNumber, CharResult charFromTLB);
 int main() {
-	if (passCheck()&&init()) {
+	if (passCheck() && init()) {
 		/**
 		 * Put your code here folks.
 		 */
@@ -60,21 +60,24 @@ bool init() {
 /**
  * Return PageNumber
  */
-unsigned char getPageNumber(unsigned int logicalAddress) {
+unsigned char getPageNumber(const unsigned int logicalAddress) {
 	return (unsigned char) ((logicalAddress & (0xff << 8)) >> 8);
 }
 
 /**
  * Return Offset
  */
-unsigned char getOffsetNumber(unsigned int logicalAddress) {
+unsigned char getOffsetNumber(const unsigned int logicalAddress) {
 	return (unsigned char) (logicalAddress & 0xff);
 }
 
-CharResult getFrameNumber(unsigned int pageNumber) {
+CharResult getFrameNumber(const unsigned int pageNumber) {
 	CharResult fromTLB;
-	tlb.getFrameNumber(pageNumber);
-	std::thread t1();
-	CharResult charResult;
-	return charResult;
+	std::thread t1(internalGetFrameNumber, pageNumber, fromTLB);
+	t1.join();
+	return fromTLB;
+}
+
+void internalGetFrameNumber(const unsigned int pageNumber, CharResult charFromTLB) {
+	charFromTLB = tlb.getFrameNumber(pageNumber);
 }
