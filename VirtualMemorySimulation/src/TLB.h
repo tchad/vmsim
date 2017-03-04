@@ -17,9 +17,10 @@ public:
 class TLB {
 public:
 	TLB();
-	CharResult getFrameNumber(const unsigned char pageNumber);
+	CharResult getFrameNumber(const unsigned char pageNumber) const;
 	void setPageFrameNumber(const unsigned char pageNumber,const unsigned char frameNumber);
-	void setInvalid(const unsigned char pageNumber);
+//	void setInvalid(const unsigned char pageNumber);
+	void invalidate();
 
 private:
 	/**
@@ -30,7 +31,7 @@ private:
 	unsigned short validMarker; // Contains the valid bit for above array.
 	                            // The rightmost bit is for pageNumber 0.
 	unsigned char pointer;
-	CharResult getPointer(const unsigned char pageNumber);
+	CharResult getPointer(const unsigned char pageNumber) const;
 };
 
 #endif /* TLB_H_ */
