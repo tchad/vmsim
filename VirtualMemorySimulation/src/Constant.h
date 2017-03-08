@@ -13,6 +13,16 @@
 #define PAGE_TABLE_ENTRY 256
 
 /**
+ * Number of int required for invalidate fields
+ */
+#define PAGE_TABLE_INVALIDATE 8
+
+/**
+ * Number of int required for aditional reverence fields
+ */
+#define PAGE_TABLE_REFERENCE_Y 8
+#define PAGE_TABLE_REFERENCE_X 2
+/**
  * You cannot change the TLB_ENTRY, otherwise you need to
  * change the length of unsigned short validMarker; in the TLB.h
  */
