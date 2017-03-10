@@ -7,6 +7,7 @@
 //============================================================================
 
 #include "TLB.h"
+#include "PageTable.h"
 #include <iostream>
 #include <thread>
 #include <mutex>
@@ -21,7 +22,12 @@ using namespace std;
 
 bool passCheck();
 bool init();
+
 void internalGetFrameNumber(const unsigned int pageNumber, CharResult charFromTLB);
+void internalGetTLBFrameNumber(const unsigned int pageNumber,
+		CharResult charFromTLB);
+void internalGetPageTableFrameNumber(const unsigned int pageNumber,
+		CharResult charFromPageTable);
 
 int main() {
 
@@ -63,18 +69,31 @@ bool passCheck() {
 	return true;
 }
 
+//=============== The TLB and Page Table variable
 TLB tlb;
+PageTable pageTable;
 bool init() {
 	return true;
 }
 
 CharResult getFrameNumber(const unsigned int pageNumber) {
 	CharResult fromTLB;
-	std::thread t1(internalGetFrameNumber, pageNumber, fromTLB);
+	std::thread t1(internalGetTLBFrameNumber, pageNumber,fromTLB);
+	CharResult fromPageTable;
+	std::thread t2(internalGetPageTableFrameNumber, pageNumber, fromPageTable);
 	t1.join();
+	t2.join();
 	return fromTLB;
 }
 
-void internalGetFrameNumber(const unsigned int pageNumber, CharResult charFromTLB) {
+void internalGetTLBFrameNumber(const unsigned int pageNumber,
+		CharResult charFromTLB) {
 	charFromTLB = tlb.getFrameNumber(pageNumber);
+}
+
+void internalGetPageTableFrameNumber(const unsigned int pageNumber,
+		CharResult charFromPageTable) {
+
+
+	charFromPageTable = pageTable.getFrameNumber(pageNumber);
 }

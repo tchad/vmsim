@@ -8,10 +8,12 @@
 #include "TLB.h"
 
 TLB::TLB() {
-	for (int i = 0; i < TLB_ENTRY; ++i) {
+	unsigned char i = 0;
+	do {
 		pageNumber[i] = 0;
 		frameNumber[i] = 0;
-	}
+
+	} while (i++ < (TLB_ENTRY - 1));
 	validMarker = 0;
 	pointer = 0;
 }
@@ -22,7 +24,7 @@ TLB::TLB() {
  * @param  pageNumber  a page you use to get the frame number
  * @return   CharResult   The result + error code with boolean
  */
-CharResult TLB::getFrameNumber(const unsigned char pageNumber) const{
+CharResult TLB::getFrameNumber(const unsigned char pageNumber) const {
 	CharResult charResult = getPointer(pageNumber);
 	if (!charResult.error) {
 		charResult.result = frameNumber[charResult.result]; // Replace the pointer with frameNumber
@@ -54,7 +56,6 @@ void TLB::setPageFrameNumber(const unsigned char pageNumber,
 //		validMarker &= ~(1 << charResult.result);
 //	}
 //}
-
 /*
  * This is for delete function where one can set a byte invalid
  * @param  pageNumber  a page you use to set invalid value
@@ -69,9 +70,9 @@ void TLB::invalidate() {
  * @param  pageNumber  a page you use to get the frame number
  * @return   CharResult   The result + error code with boolean
  */
-CharResult TLB::getPointer(const unsigned char pageNumber) const{
+CharResult TLB::getPointer(const unsigned char pageNumber) const {
 // This for loops will search from the newest added item at pointer to 0
-	int i = pointer - 1;
+	unsigned char i = pointer - 1;
 	CharResult charResult;
 	for (; i >= 0; --i) {
 		if ((validMarker >> i) & 1) { // only enter when the valid is 1.

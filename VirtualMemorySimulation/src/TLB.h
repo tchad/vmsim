@@ -8,12 +8,7 @@
 #ifndef TLB_H_
 #define TLB_H_
 #include "Constant.h"
-class CharResult {
-public:
-	unsigned char result;
-	bool error;
-};
-
+#include "CharResult.h"
 class TLB {
 public:
 	TLB();
@@ -21,7 +16,6 @@ public:
 	void setPageFrameNumber(const unsigned char pageNumber,const unsigned char frameNumber);
 //	void setInvalid(const unsigned char pageNumber);
 	void invalidate();
-
 private:
 	/**
 	 * Initialization of this variable is on the constructor.
