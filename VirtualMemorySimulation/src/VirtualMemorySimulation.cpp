@@ -10,14 +10,24 @@
 #include <iostream>
 #include <thread>
 #include <mutex>
+#include  "util.h"
+
+#define UNIT_TEST
+#ifdef UNIT_TEST
+#include "UnitTest.h"
+#endif  //UNIT_TEST
+
 using namespace std;
 
 bool passCheck();
 bool init();
-unsigned char getPageNumber(unsigned int logicalAddress);
-unsigned char getOffsetNumber(unsigned int logicalAddress);
 void internalGetFrameNumber(const unsigned int pageNumber, CharResult charFromTLB);
+
 int main() {
+
+#ifdef UNIT_TEST
+	Test::UnitTest::test();
+#endif  //UNIT_TEST
 	if (passCheck() && init()) {
 		/**
 		 * Put your code here folks.
@@ -56,19 +66,6 @@ bool passCheck() {
 TLB tlb;
 bool init() {
 	return true;
-}
-/**
- * Return PageNumber
- */
-unsigned char getPageNumber(const unsigned int logicalAddress) {
-	return (unsigned char) ((logicalAddress & (0xff << 8)) >> 8);
-}
-
-/**
- * Return Offset
- */
-unsigned char getOffsetNumber(const unsigned int logicalAddress) {
-	return (unsigned char) (logicalAddress & 0xff);
 }
 
 CharResult getFrameNumber(const unsigned int pageNumber) {
