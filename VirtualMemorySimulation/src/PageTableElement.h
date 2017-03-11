@@ -14,7 +14,6 @@ public:
 	PAGENUM pageNumber;
 	FRAMENUM frameNumber;
 	bool valid;
-private:
-
+	PAGENUM counter;
 };
 #endif /* PAGETABLEELEMENT_H_ */

@@ -9,15 +9,18 @@
 #define PAGETABLE_H_
 #include "Constant.h"
 #include "PageTableElement.h"
-class PageTable {
+class PageTable { // the "get" function is not const. This is because they need to modify the counter for LRU.
 public:
 	PageTable();
 	STATUS getFrameNumber(const PAGENUM pageNumber,
-			FRAMENUM* frameNumber) const;
+			FRAMENUM* frameNumber);
 	void setPageFrameNumber(const PAGENUM pageNumber,
 			const FRAMENUM frameNumber);
+//	PageTableElement* getLRU();
+	void decreaseLRUCounter(const uint8_t startFrom);
+	void invalidate(const PAGENUM pageNumber);
 private:
-	STATUS getPointer(const PAGENUM pageNumber, FRAMENUM* pointer) const;
+	STATUS getPointer(const PAGENUM pageNumber, FRAMENUM* pointer);
 	PageTableElement* pageTableElements[PAGE_TABLE_ENTRY];
 };
 
