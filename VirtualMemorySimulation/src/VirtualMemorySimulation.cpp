@@ -11,22 +11,25 @@
 #include <iostream>
 #include  "util.h"
 
-#define UNIT_TEST
+//#define UNIT_TEST
+
 #ifdef UNIT_TEST
 #include "UnitTest.h"
 #endif  //UNIT_TEST
 
 using namespace std;
 
-bool init();
 
-int main() {
+int main(int argc, char **argv)
+{
 
 #ifdef UNIT_TEST
 	Test::UnitTest::test();
-#endif  //UNIT_TEST
-	TLB tlb;
-	PageTable pageTable;
+#else
+
+
+//	TLB tlb;
+//	PageTable pageTable;
 	/**
 	 * Put your code here folks.
 	 */
@@ -34,6 +37,8 @@ int main() {
 	// The int casting below is just for display!
 	cout << (int) getPageNumber(logicalAddress) << endl;
 	cout << (int) getOffsetNumber(logicalAddress) << endl;
+
+#endif
 
 	return 0;
 }
