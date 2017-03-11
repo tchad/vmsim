@@ -46,11 +46,12 @@ using FRAMENUM = uint8_t;
 using PAGENUM = uint8_t;
 using OFFSET =  uint8_t;
 using VADDR = uint32_t;
-using byte = char;
+using byte = int8_t;
 
 enum STATUS {
 	OK,
-	FAILED
+	FAILED,
+	PAGEFAULT
 };
 
 #endif /* CONSTANT_H_ */

@@ -22,16 +22,17 @@ PageTable::PageTable() {
 /*
  * translate the pointer to frame number
  */
-CharResult PageTable::getFrameNumber(const unsigned char pageNumber) const {
-	CharResult charResult = getPointer(pageNumber);
-	if (!charResult.error) {
-		charResult.result = frameNumber[pageNumber];
-	}
-	return charResult;
+STATUS PageTable::getFrameNumber(const PAGENUM pageNumber, FRAMENUM* frameNumber) const {
+//	CharResult charResult = getPointer(pageNumber);
+//	if (!charResult.error) {
+//		charResult.result = frameNumber[pageNumber];
+//	}
+//	return charResult;
+	return STATUS::OK;
 }
 
-void PageTable::setPageFrameNumber(const unsigned char pageNumber,
-		const unsigned char frameNumber) {
+void PageTable::setPageFrameNumber(const PAGENUM pageNumber,
+		const FRAMENUM frameNumber) {
 	/*
 	 * Set the validity to one
 	 */
@@ -46,7 +47,7 @@ void PageTable::setPageFrameNumber(const unsigned char pageNumber,
 }
 
 void PageTable::invalidate() {
-	for (unsigned char i = 0; i < PAGE_TABLE_INVALIDATE; ++i) {
+	for (uint8_t i = 0; i < PAGE_TABLE_INVALIDATE; ++i) {
 		validMarker[i] = 0;
 	}
 }
@@ -54,17 +55,18 @@ void PageTable::invalidate() {
 /*
  * Get the pointer from page table
  */
-CharResult PageTable::getPointer(const unsigned char pageNumber) const {
-	CharResult charResult;
-	div_t invalidateLocation = div(pageNumber, 32);
-	unsigned char valid = (validMarker[invalidateLocation.quot]
-			>> invalidateLocation.rem) & 1;
-
-	if (valid == 1) {
-		charResult.result = pageNumber;
-		charResult.error = false;
-	}
-	charResult.result = 0;
-	charResult.error = true;
-	return charResult;
+STATUS PageTable::getPointer(const PAGENUM pageNumber, FRAMENUM* pointer) const {
+//	CharResult charResult;
+//	div_t invalidateLocation = div(pageNumber, 32);
+//	unsigned char valid = (validMarker[invalidateLocation.quot]
+//			>> invalidateLocation.rem) & 1;
+//
+//	if (valid == 1) {
+//		charResult.result = pageNumber;
+//		charResult.error = false;
+//	}
+//	charResult.result = 0;
+//	charResult.error = true;
+//	return charResult;
+	return STATUS::OK;
 }
