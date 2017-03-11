@@ -8,11 +8,22 @@
 #include "MM.h"
 
 MM::MM() {
-	// TODO Auto-generated constructor stub
 
+	mainMemory = new byte [PHYSICAL_MEMORY_ENTRY*FRAME_SIZE];
 }
 
 MM::~MM() {
-	// TODO Auto-generated destructor stub
+	delete [] mainMemory;
 }
 
+byte* MM::memBase() {
+	return mainMemory;
+}
+
+byte MM::getByte(PADDR addr) {
+	return *(mainMemory+addr);
+}
+
+byte* MM::frameAddr(FRAMENUM num) {
+	return mainMemory+num*FRAME_SIZE;
+}
