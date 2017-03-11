@@ -8,24 +8,23 @@
 #ifndef TLB_H_
 #define TLB_H_
 #include "Constant.h"
-#include "CharResult.h"
 class TLB {
 public:
 	TLB();
-	CharResult getFrameNumber(const unsigned char pageNumber) const;
-	void setPageFrameNumber(const unsigned char pageNumber,const unsigned char frameNumber);
-//	void setInvalid(const unsigned char pageNumber);
+	STATUS getFrameNumber(const PAGENUM pageNumber, FRAMENUM* frameNumber) const;
+	void setPageFrameNumber(const PAGENUM pageNumber,const FRAMENUM frameNumber);
+//	void setInvalid(const PAGENUM pageNumber);
 	void invalidate();
 private:
 	/**
 	 * Initialization of this variable is on the constructor.
 	 */
-	unsigned char pageNumber[TLB_ENTRY];
-	unsigned char frameNumber[TLB_ENTRY];
-	unsigned short validMarker; // Contains the valid bit for above array.
+	PAGENUM pageNumber[TLB_ENTRY];
+	FRAMENUM frameNumber[TLB_ENTRY];
+	uint16_t validMarker; // Contains the valid bit for above array.
 	                            // The rightmost bit is for pageNumber 0.
-	unsigned char pointer;
-	CharResult getPointer(const unsigned char pageNumber) const;
+	uint8_t pointer;
+	STATUS getPointer(const PAGENUM pageNumber, FRAMENUM* pointer) const;
 };
 
 #endif /* TLB_H_ */

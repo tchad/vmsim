@@ -51,7 +51,8 @@ using byte = char;
 
 enum STATUS {
 	OK,
-	FAILED
+	FAILED,
+	PAGEFAULT
 };
 
 #endif /* CONSTANT_H_ */
