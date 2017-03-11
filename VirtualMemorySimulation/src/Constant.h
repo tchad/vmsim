@@ -46,7 +46,8 @@ using FRAMENUM = uint8_t;
 using PAGENUM = uint8_t;
 using OFFSET =  uint8_t;
 using VADDR = uint32_t;
-using byte = int8_t;
+using PADDR = uint32_t;
+using byte = char;
 
 enum STATUS {
 	OK,
