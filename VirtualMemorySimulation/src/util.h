@@ -20,5 +20,10 @@ PAGENUM getPageNumber(const VADDR logicalAddress);
  */
 OFFSET getOffsetNumber(const VADDR logicalAddress);
 
+/**
+ * This function can also be used to combine the virtual address if needed
+ */
+PADDR combineAddr(FRAMENUM p, OFFSET o);
+
 
 #endif /* UTIL_H_ */

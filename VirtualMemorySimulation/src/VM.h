@@ -6,11 +6,15 @@
 #define VM_H_
 
 #include "Constant.h"
+#include "BackingStore.h"
+#include "MM.h"
+#include "PageTable.h"
 
 class VM final {
 public:
 	class Result;
 	static Result simulate(const std::string &addresses);
+	static STATUS handlePageFault(BackingStore &bs, MM &mm, PageTable &pt, PAGENUM pagenum, FRAMENUM &framenum);
 
 	class Result final {
 	public:
@@ -41,7 +45,7 @@ public:
 
 		void append(Itm itm);
 		void setStatus(STATUS status);
-		friend Result VM::simulate(const std::string&);
+		friend class VM;
 	};
 
 	VM() = delete;

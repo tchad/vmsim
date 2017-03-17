@@ -10,9 +10,8 @@ OFFSET getOffsetNumber(const VADDR logicalAddress)
 	return (OFFSET) (logicalAddress & 0xff);
 }
 
-PADDR combineAddr(PAGENUM p, OFFSET o)
+PADDR combineAddr(FRAMENUM p, OFFSET o)
 {
 	return (PADDR(p) << 8) | o;
 }
-
 
