@@ -31,8 +31,12 @@ int main(int argc, char **argv)
 	if(argc != 2) {
 		cerr << "Invalid arguments\n";
 	} else {
-		VM vm;
-		VM::Result result = vm.simulate(string(argv[1]));
+		VM::Result result = VM::simulate(string(argv[1]));
+		if(result.status() == STATUS::OK) {
+			std::cout << "OK\n";
+		} else {
+			std::cout << "FAILED\n";
+		}
 
 		//compare and print results here;
 	}

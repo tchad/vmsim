@@ -6,13 +6,12 @@
 #define VM_H_
 
 #include "Constant.h"
-#include "BackingStore.h"
-#include "MM.h"
-#include "PageTable.h"
-#include "TLB.h"
 
 class VM final {
 public:
+	class Result;
+	static Result simulate(const std::string &addresses);
+
 	class Result final {
 	public:
 		struct Itm {
@@ -24,8 +23,6 @@ public:
 		using size_type = RESULTDATA::size_type;
 
 		Result() = default;
-		Result(const RESULTDATA& data, STATUS status);
-
 		Result(const Result&) = delete;
 		Result& operator=(const Result&) = delete;
 
@@ -41,11 +38,13 @@ public:
 	private:
 		RESULTDATA _data;
 		STATUS _status = FAILED;
+
+		void append(Itm itm);
+		void setStatus(STATUS status);
+		friend Result VM::simulate(const std::string&);
 	};
 
-	VM();
-
-	Result simulate(const std::string &addresses);
+	VM() = delete;
 };
 
 
