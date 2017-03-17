@@ -20,7 +20,7 @@ RESULT Test::UnitTest::test_BackingStorage()
 	BackingStore bs;
 
 	byte buff[PAGE_SIZE];
-	bs.open("BACKING_STORE.bin");
+	bs.open(BACKING_STORE_FILE);
 	VADDR vaddr;
 	byte expected;
 	PAGENUM page;

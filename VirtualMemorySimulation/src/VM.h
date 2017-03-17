@@ -1,17 +1,57 @@
-/*
- * VM.h
- *
- *  Created on: Mar 9, 2017
- *      Author: udntneed2knw
- */
+#include <string>
+#include <vector>
+#include <type_traits>
 
 #ifndef VM_H_
 #define VM_H_
 
-class VM {
+#include "Constant.h"
+#include "BackingStore.h"
+#include "MM.h"
+#include "PageTable.h"
+#include "TLB.h"
+
+class VM final {
 public:
+	class Result final {
+	public:
+		struct Itm {
+			VADDR vAddr;
+			PADDR pAddr;
+			byte value;
+		};
+		using RESULTDATA = std::vector<Itm>;
+		using size_type = RESULTDATA::size_type;
+
+		Result() = default;
+		Result(const RESULTDATA& data, STATUS status);
+
+		Result(const Result&) = delete;
+		Result& operator=(const Result&) = delete;
+
+		Result(Result &&r);
+		Result& operator=(Result &&r);
+
+		size_type count() const;
+		const RESULTDATA* data() const;
+		const Itm item(size_type i) const;
+		STATUS status() const;
+
+
+	private:
+		RESULTDATA _data;
+		STATUS _status = FAILED;
+	};
+
 	VM();
-	virtual ~VM();
+
+	Result simulate(const std::string &addresses);
 };
+
+
+inline const VM::Result::Itm VM::Result::item(VM::Result::size_type i) const
+{
+	return _data[i];
+}
 
 #endif /* VM_H_ */

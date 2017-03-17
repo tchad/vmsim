@@ -8,6 +8,7 @@
 #define CONSTANT_H_
 
 #include <cstdint>
+#include <string>
 
 /*
  * 2 ^ 8 PAGE_TABLE_ENTRY
@@ -54,5 +55,7 @@ enum STATUS {
 	FAILED,
 	PAGEFAULT
 };
+
+constexpr char BACKING_STORE_FILE[] = "BACKING_STORE.bin";
 
 #endif /* CONSTANT_H_ */

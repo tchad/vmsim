@@ -6,10 +6,11 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include "TLB.h"
-#include "PageTable.h"
+#include <string>
 #include <iostream>
-#include  "util.h"
+
+#include "VM.h"
+
 
 //#define UNIT_TEST
 
@@ -27,17 +28,14 @@ int main(int argc, char **argv)
 	Test::UnitTest::test();
 #else
 
+	if(argc != 2) {
+		cerr << "Invalid arguments\n";
+	} else {
+		VM vm;
+		VM::Result result = vm.simulate(string(argv[1]));
 
-//	TLB tlb;
-//	PageTable pageTable;
-	/**
-	 * Put your code here folks.
-	 */
-	uint32_t logicalAddress = 576230045;
-	// The int casting below is just for display!
-	cout << (int) getPageNumber(logicalAddress) << endl;
-	cout << (int) getOffsetNumber(logicalAddress) << endl;
-
+		//compare and print results here;
+	}
 #endif
 
 	return 0;
