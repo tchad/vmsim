@@ -41,8 +41,25 @@ STATUS VM::Result::status() const
 	return _status;
 }
 
-void VM::Result::append(Itm itm) {
+void VM::Result::append(VM::Result::Itm itm) {
 	_data.push_back(itm);
+}
+
+bool VM::Result::operator ==(const VM::Result& r) const {
+	if(this->count() != r.count()) {
+		return false;
+	}
+
+	const VM::Result::RESULTDATA* rData = r.data();
+	for(VM::Result::size_type i=0; i<_data.size(); ++i){
+		if(_data[i].pAddr != (*rData)[i].pAddr ||
+		   _data[i].vAddr != (*rData)[i].vAddr ||
+		   _data[i].value != (*rData)[i].value) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 void VM::Result::setStatus(STATUS status) {
@@ -112,6 +129,42 @@ VM::Result VM::simulate(const std::string& addresses)
 	}
 
 	return result;
+}
+
+VM::Result VM::controlDataFromFile(const std::string& ctrl) {
+	VM::Result ret;
+	ret.setStatus(STATUS::FAILED);
+
+	std::ifstream istream(ctrl);
+	if(istream.is_open()) {
+		while(!istream.eof()) {
+			std::string sink;
+			VM::Result::Itm itm;
+
+			istream >> sink; //"Virtual"
+			if(sink.empty()) {
+				continue; //quick hack to handle the end of file
+			}
+			istream >> sink; //"Address:"
+			istream >> sink; //number
+			itm.vAddr = std::stoi(sink);
+
+			istream >> sink; //"Physical"
+			istream >> sink; //"Address:"
+			istream >> sink; //number
+			itm.pAddr = std::stoi(sink);
+
+			istream >> sink; //"Value:"
+			istream >> sink; //number
+			itm.value = std::stoi(sink);
+
+
+			ret.append(itm);
+		}
+		ret.setStatus(STATUS::OK);
+	}
+
+	return ret;
 }
 
 STATUS VM::handlePageFault(BackingStore& bs, MM& mm, PageTable& pt,

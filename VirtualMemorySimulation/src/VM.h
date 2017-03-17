@@ -14,6 +14,7 @@ class VM final {
 public:
 	class Result;
 	static Result simulate(const std::string &addresses);
+	static Result controlDataFromFile(const std::string &ctrl);
 	static STATUS handlePageFault(BackingStore &bs, MM &mm, PageTable &pt, PAGENUM pagenum, FRAMENUM &framenum);
 
 	class Result final {
@@ -32,6 +33,7 @@ public:
 
 		Result(Result &&r);
 		Result& operator=(Result &&r);
+		bool operator==(const Result &r) const;
 
 		size_type count() const;
 		const RESULTDATA* data() const;
