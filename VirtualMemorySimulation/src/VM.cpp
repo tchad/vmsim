@@ -93,8 +93,12 @@ VM::Result VM::simulate(const std::string& addresses)
 				FRAMENUM frame;
 				OFFSET offset;
 				byte data;
+				std::string buff;
 
-				istream >> vaddr;
+				istream >> buff;
+				if(buff.empty())
+					continue; //skip on last line which is empty
+				vaddr = std::stoi(buff);
 				page = getPageNumber(vaddr);
 				offset = getOffsetNumber(vaddr);
 
