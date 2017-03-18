@@ -21,7 +21,7 @@ public:
 	void invalidate(const PAGENUM pageNumber);
 private:
 	STATUS getPointer(const PAGENUM pageNumber, FRAMENUM* pointer);
-	PageTableElement* pageTableElements[PAGE_TABLE_ENTRY];
+	PageTableElement *pageTableElements;
 };
 
 #endif /* PAGETABLE_H_ */

@@ -11,8 +11,9 @@
 PageTable::PageTable() {
 	// TODO Auto-generated constructor stub
 	FRAMENUM i = 0;
+	pageTableElements = new PageTableElement[PAGE_TABLE_ENTRY];
 	do { // We use do while here, to prevent overflow
-		pageTableElements[i] = NULL;
+		pageTableElements[i].valid = false;
 	} while (i++ < (PAGE_TABLE_ENTRY - 1));
 }
 
@@ -20,10 +21,10 @@ PageTable::PageTable() {
  * translate the pointer to frame number
  */
 STATUS PageTable::getFrameNumber(const PAGENUM pageNumber,
-		FRAMENUM* frameNumber){
+		FRAMENUM* frameNumber) {
 	STATUS status = getPointer(pageNumber, frameNumber);
 	if (status == STATUS::OK) {
-		*frameNumber = (pageTableElements[*frameNumber]->frameNumber);
+		*frameNumber = (pageTableElements[*frameNumber].frameNumber);
 	}
 	return status;
 }
@@ -31,38 +32,29 @@ STATUS PageTable::getFrameNumber(const PAGENUM pageNumber,
 void PageTable::setPageFrameNumber(const PAGENUM pageNumber,
 		const FRAMENUM frameNumber) {
 	FRAMENUM i = 0;
-	PageTableElement* pageTableElement;
-	do { // We use do while here, to prevent overflow
-		if (pageTableElements[i] == NULL) {
-			pageTableElement = new PageTableElement();
-			pageTableElement->pageNumber = pageNumber;
-			pageTableElement->frameNumber = frameNumber;
-			pageTableElement->valid = true;
-			pageTableElement->counter = (PAGE_SIZE - 1);
-			pageTableElements[i] = pageTableElement;
-			return;
-		} else if (!(pageTableElements[i]->valid)) { // We just edit pageTableElements, no need to delete
-			pageTableElement = pageTableElements[i];
-			decreaseLRUCounter(pageTableElement->counter);
-			pageTableElement->pageNumber = pageNumber;
-			pageTableElement->frameNumber = frameNumber;
-			pageTableElement->valid = true;
-			pageTableElement->counter = (PAGE_SIZE - 1);
+	PAGENUM leastUsed = 0;
+	do {
+		if (!pageTableElements[i].valid) { // We just edit pageTableElements, no need to delete
+			decreaseLRUCounter(pageTableElements[i].counter);
+			pageTableElements[i].pageNumber = pageNumber;
+			pageTableElements[i].frameNumber = frameNumber;
+			pageTableElements[i].valid = true;
+			pageTableElements[i].counter = (PAGE_SIZE - 1);
 			return;
 		}
 //			 This is to get the LRU. Only reachable if the "if" statement above is not fulfilled.
-		if ((pageTableElement->counter) > (pageTableElements[i]->counter)) {
-			pageTableElement = pageTableElements[i];
+		if (pageTableElements[i].valid&&(pageTableElements[i].counter > pageTableElements[leastUsed].counter)) {
+			leastUsed = i;
 		}
 
 	} while (i++ < (PAGE_TABLE_ENTRY - 1));
 	// If we reach here, there is no null or invalid elements in pageTableElements[], so we need
 	// to use LRU
-	decreaseLRUCounter(pageTableElement->counter);
-	pageTableElement->pageNumber = pageNumber;
-	pageTableElement->frameNumber = frameNumber;
-	pageTableElement->valid = true;
-	pageTableElement->counter = (PAGE_SIZE - 1);
+	decreaseLRUCounter(leastUsed);
+	pageTableElements[leastUsed].pageNumber = pageNumber;
+	pageTableElements[leastUsed].frameNumber = frameNumber;
+	pageTableElements[leastUsed].valid = true;
+	pageTableElements[leastUsed].counter = (PAGE_SIZE - 1);
 }
 
 /**
@@ -71,9 +63,9 @@ void PageTable::setPageFrameNumber(const PAGENUM pageNumber,
 void PageTable::decreaseLRUCounter(const uint8_t startFrom) {
 	FRAMENUM i = 0;
 	do { // We use do while here, to prevent overflow
-		if ((pageTableElements[i] != NULL)
-				&& ((pageTableElements[i]->counter) > startFrom)) { // We just edit pageTableElements, no need to delete
-			--(pageTableElements[i]->counter);
+		if (pageTableElements[i].valid
+				&& (pageTableElements[i].counter > startFrom)) { // We just edit pageTableElements, no need to delete
+			--(pageTableElements[i].counter);
 		}
 	} while (i++ < (PAGE_TABLE_ENTRY - 1));
 }
@@ -81,9 +73,8 @@ void PageTable::decreaseLRUCounter(const uint8_t startFrom) {
 void PageTable::invalidate(const PAGENUM pageNumber) {
 	FRAMENUM i = 0;
 	do { // We use do while here, to prevent overflow
-		if ((pageTableElements[i] != NULL)
-				&& ((pageTableElements[i]->pageNumber) == pageNumber)) { // We just edit pageTableElements, no need to delete
-			pageTableElements[i]->valid = false;
+		if ((pageTableElements[i].pageNumber) == pageNumber) { // We just edit pageTableElements, no need to delete
+			pageTableElements[i].valid = false;
 			break;
 		}
 	} while (i++ < (PAGE_TABLE_ENTRY - 1));
@@ -92,23 +83,20 @@ void PageTable::invalidate(const PAGENUM pageNumber) {
 /*
  * Get the pointer from page table
  */
-STATUS PageTable::getPointer(const PAGENUM pageNumber,
-		FRAMENUM* pointer){
+STATUS PageTable::getPointer(const PAGENUM pageNumber, FRAMENUM* pointer) {
 	FRAMENUM i = 0;
 	do { // We use do while here, to prevent overflow
-		if (pageTableElements[i] != NULL) {
-			if ((pageTableElements[i]->pageNumber) == pageNumber) {
-				if ((pageTableElements[i]->valid)) {
+			if (pageTableElements[i].pageNumber == pageNumber) {
+				if (pageTableElements[i].valid) {
 					*pointer = i;
-					decreaseLRUCounter(pageTableElements[i]->counter);
-					pageTableElements[i]->counter = PAGE_SIZE-1;
+					decreaseLRUCounter(pageTableElements[i].counter);
+					pageTableElements[i].counter = PAGE_SIZE - 1;
 					return STATUS::OK;
 				} else {
 					return STATUS::PAGEFAULT;
 				}
 //				break; // An unreachable code.
 			}
-		}
 	} while (i++ < (PAGE_TABLE_ENTRY - 1));
 	return STATUS::PAGEFAULT;
 }
