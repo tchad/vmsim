@@ -35,20 +35,18 @@ int main(int argc, char **argv)
 
 		if(result.status() != STATUS::OK) {
 			cout << "Simulation failed!\n";
-		}
-
-		if(argc == 3) {
-			//compare with control data
-			cout << "Comparing with control data: ";
-			VM::Result controlData(VM::controlDataFromFile(argv[2]));
-			if(controlData == result) {
-				cout << "MATCH!\n";
-			} else {
-				cout << "Results differ";
-			}
 		} else {
-			//print on screen
-			if(result.status() == STATUS::OK) {
+			if(argc == 3) {
+				//compare with control data
+				cout << "Comparing with control data: ";
+				VM::Result controlData(VM::controlDataFromFile(argv[2]));
+				if(controlData == result) {
+					cout << "MATCH!\n";
+				} else {
+					cout << "Results differ";
+				}
+			} else {
+				//print on screen
 				std::cout << "OK\n";
 				for(VM::Result::size_type i=0; i<result.count(); ++i) {
 					VM::Result::Itm itm = result.item(i);
@@ -57,8 +55,6 @@ int main(int argc, char **argv)
 							<< " Value: " << (int)itm.value
 							<< endl;
 				}
-			} else {
-				std::cout << "FAILED\n";
 			}
 		}
 	}
