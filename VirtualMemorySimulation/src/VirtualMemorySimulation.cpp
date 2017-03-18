@@ -33,6 +33,10 @@ int main(int argc, char **argv)
 	} else {
 		VM::Result result = VM::simulate(string(argv[1]));
 
+		if(result.status() != STATUS::OK) {
+			cout << "Simulation failed!\n";
+		}
+
 		if(argc == 3) {
 			//compare with control data
 			cout << "Comparing with control data: ";
