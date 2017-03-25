@@ -9,7 +9,6 @@
 #include "stdlib.h"
 #include <iostream>
 PageTable::PageTable() {
-	// TODO Auto-generated constructor stub
 	FRAMENUM i = 0;
 	pageTableElements = new PageTableElement[PAGE_TABLE_ENTRY_COUNT];
 	do { // We use do while here, to prevent overflow
@@ -86,6 +85,7 @@ void PageTable::setPageFrameNumber(const PAGENUM pageNumber,
 	// If we reach here, there is no null or invalid elements in pageTableElements[], so we need
 	// to use LRU
 	decreaseLRUCounter(leastUsed);
+	std::cout << "LRU Used! " << (int) leastUsed << std::endl;
 	pageTableElements[leastUsed].pageNumber = pageNumber;
 	pageTableElements[leastUsed].frameNumber = frameNumber;
 	pageTableElements[leastUsed].valid = true;
@@ -96,7 +96,7 @@ void PageTable::setPageFrameNumber(const PAGENUM pageNumber,
  * This doesn't include the startFrom itself.
  */
 void PageTable::decreaseLRUCounter(const uint8_t startFrom) {
-	std::cout << "LRU Used! " << (int) startFrom << std::endl;
+	std::cout << "LRU count! " << (int) startFrom << std::endl;
 	FRAMENUM i = 0;
 	do { // We use do while here, to prevent overflow
 		if (pageTableElements[i].valid
