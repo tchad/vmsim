@@ -56,6 +56,7 @@ FRAMENUM PageTable::getLRUVictim() {
 		}
 
 	} while (i++ < (PAGE_TABLE_ENTRY_COUNT - 1));
+	std::cout << "LRU Victim! " << (int) leastUsed << std::endl;
 	return pageTableElements[leastUsed].frameNumber;
 }
 
