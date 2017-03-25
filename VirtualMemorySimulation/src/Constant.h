@@ -13,7 +13,7 @@
 /*
  * 2 ^ 8 PAGE_TABLE_ENTRY
  */
-constexpr uint32_t PAGE_TABLE_ENTRY = 256;
+constexpr uint32_t PAGE_TABLE_ENTRY_COUNT = 256;
 
 /**
  * Number of int required for invalidate fields
@@ -41,7 +41,7 @@ constexpr uint32_t PAGE_SIZE = 256;
  */
 constexpr uint32_t FRAME_SIZE = 256;
 
-constexpr uint32_t PHYSICAL_MEMORY_ENTRY = 256; // Thus total is 256 frames x 256-byte frame size
+constexpr uint32_t BACKING_STORE_FRAME_COUNT = 256;
 
 using FRAMENUM = uint8_t;
 using PAGENUM = uint8_t;

@@ -10,14 +10,14 @@
 
 MM::MM() {
 
-	mainMemory = new byte [PHYSICAL_MEMORY_ENTRY*FRAME_SIZE];
+	mainMemory = new byte [PAGE_TABLE_ENTRY_COUNT*FRAME_SIZE];
 
 	FRAMENUM fnum = 0;
 	do{
 		_freeFrameList.push(fnum);
 		++fnum;
 
-	} while(fnum != (PHYSICAL_MEMORY_ENTRY-1));
+	} while(fnum != (PAGE_TABLE_ENTRY_COUNT-1));
 }
 
 MM::~MM() {

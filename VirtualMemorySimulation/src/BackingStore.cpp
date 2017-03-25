@@ -46,7 +46,7 @@ STATUS BackingStore::retriveFrame(PAGENUM page, byte* dst)
 {
 	STATUS ret = STATUS::FAILED;
 
-	if((backingStoreFile != NULL) && (page < PHYSICAL_MEMORY_ENTRY)) {
+	if((backingStoreFile != NULL) && (page < BACKING_STORE_FRAME_COUNT)) {
 		long fileoffset = page * PAGE_SIZE;
 		if(0 == fseek(backingStoreFile, fileoffset, SEEK_SET)) {
 			if( PAGE_SIZE == fread(dst, sizeof(byte), PAGE_SIZE, backingStoreFile)) {

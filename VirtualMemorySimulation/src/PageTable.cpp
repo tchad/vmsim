@@ -11,10 +11,10 @@
 PageTable::PageTable() {
 	// TODO Auto-generated constructor stub
 	FRAMENUM i = 0;
-	pageTableElements = new PageTableElement[PAGE_TABLE_ENTRY];
+	pageTableElements = new PageTableElement[PAGE_TABLE_ENTRY_COUNT];
 	do { // We use do while here, to prevent overflow
 		pageTableElements[i].valid = false;
-	} while (i++ < (PAGE_TABLE_ENTRY - 1));
+	} while (i++ < (PAGE_TABLE_ENTRY_COUNT - 1));
 }
 
 /*
@@ -47,7 +47,7 @@ void PageTable::setPageFrameNumber(const PAGENUM pageNumber,
 			leastUsed = i;
 		}
 
-	} while (i++ < (PAGE_TABLE_ENTRY - 1));
+	} while (i++ < (PAGE_TABLE_ENTRY_COUNT - 1));
 	// If we reach here, there is no null or invalid elements in pageTableElements[], so we need
 	// to use LRU
 	decreaseLRUCounter(leastUsed);
@@ -67,7 +67,7 @@ void PageTable::decreaseLRUCounter(const uint8_t startFrom) {
 				&& (pageTableElements[i].counter > startFrom)) { // We just edit pageTableElements, no need to delete
 			--(pageTableElements[i].counter);
 		}
-	} while (i++ < (PAGE_TABLE_ENTRY - 1));
+	} while (i++ < (PAGE_TABLE_ENTRY_COUNT - 1));
 }
 
 void PageTable::invalidate(const PAGENUM pageNumber) {
@@ -77,7 +77,7 @@ void PageTable::invalidate(const PAGENUM pageNumber) {
 			pageTableElements[i].valid = false;
 			break;
 		}
-	} while (i++ < (PAGE_TABLE_ENTRY - 1));
+	} while (i++ < (PAGE_TABLE_ENTRY_COUNT - 1));
 }
 
 /*
@@ -97,7 +97,7 @@ STATUS PageTable::getPointer(const PAGENUM pageNumber, FRAMENUM* pointer) {
 				}
 //				break; // An unreachable code.
 			}
-	} while (i++ < (PAGE_TABLE_ENTRY - 1));
+	} while (i++ < (PAGE_TABLE_ENTRY_COUNT - 1));
 	return STATUS::PAGEFAULT;
 }
 
