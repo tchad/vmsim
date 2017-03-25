@@ -16,6 +16,7 @@ public:
 			FRAMENUM* frameNumber);
 	void setPageFrameNumber(const PAGENUM pageNumber,
 			const FRAMENUM frameNumber);
+	FRAMENUM getLRUVictim();
 //	PageTableElement* getLRU();
 	void decreaseLRUCounter(const uint8_t startFrom);
 	void invalidate(const PAGENUM pageNumber);
