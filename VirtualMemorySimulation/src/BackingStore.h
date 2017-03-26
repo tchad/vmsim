@@ -14,6 +14,12 @@
 
 class BackingStore {
 public:
+	struct STATISTICS {
+		uint32_t frameRetrive;
+
+		STATISTICS();
+	};
+
 	BackingStore();
 	virtual ~BackingStore();
 
@@ -22,9 +28,13 @@ public:
 
 	STATUS retriveFrame(PAGENUM page, byte* dst);
 
+	STATISTICS getStats();
+
 private:
 	std::string filepath;
 	FILE* backingStoreFile = NULL;
+
+	STATISTICS STATS;
 
 };
 

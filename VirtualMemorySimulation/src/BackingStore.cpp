@@ -44,6 +44,7 @@ void BackingStore::close()
 
 STATUS BackingStore::retriveFrame(PAGENUM page, byte* dst)
 {
+	STATS.frameRetrive++;
 	STATUS ret = STATUS::FAILED;
 
 	if((backingStoreFile != NULL) && (page < BACKING_STORE_FRAME_COUNT)) {
@@ -56,4 +57,14 @@ STATUS BackingStore::retriveFrame(PAGENUM page, byte* dst)
 	}
 
 	return ret;
+}
+
+BackingStore::STATISTICS::STATISTICS():
+	frameRetrive(0)
+{
+}
+
+BackingStore::STATISTICS BackingStore::getStats() {
+	return STATS;
+
 }
