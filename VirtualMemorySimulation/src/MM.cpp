@@ -37,6 +37,7 @@ byte* MM::frameAddr(FRAMENUM num) {
 STATUS MM::addFreeFrame(FRAMENUM framenum) {
 	//TODO: add duplicates detection
 	_freeFrameList.push(framenum);
+	STATS.addFreeFrameCount++;
 	return STATUS::OK;
 }
 
@@ -48,6 +49,11 @@ STATUS MM::obtainFreeFrame(FRAMENUM& framenum) {
 		_freeFrameList.pop();
 		ret = STATUS::OK;
 	}
-
+	STATS.obtainFreeFrameCount++;
 	return ret;
+}
+
+MM::STATISTICS::STATISTICS(){
+	addFreeFrameCount=0;
+	obtainFreeFrameCount=0;
 }

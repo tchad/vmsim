@@ -16,6 +16,11 @@
 
 class MM {
 public:
+	struct STATISTICS{
+		uint32_t addFreeFrameCount;
+		uint32_t obtainFreeFrameCount;
+		STATISTICS();
+	};
 	MM();
 	virtual ~MM();
 	byte* memBase();
@@ -28,6 +33,7 @@ public:
 private:
 	byte* mainMemory;
 	std::queue<FRAMENUM, std::list<FRAMENUM> > _freeFrameList;
+	STATISTICS STATS;
 
 };
 
