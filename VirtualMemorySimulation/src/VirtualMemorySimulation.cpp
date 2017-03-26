@@ -11,23 +11,11 @@
 
 #include "VM.h"
 
-
-//#define UNIT_TEST
-
-#ifdef UNIT_TEST
-#include "UnitTest.h"
-#endif  //UNIT_TEST
-
 using namespace std;
 
 
 int main(int argc, char **argv)
 {
-
-#ifdef UNIT_TEST
-	Test::UnitTest::test();
-#else
-
 	if(argc < 2 && argc > 3 ) {
 		cerr << "Invalid arguments\n";
 	} else {
@@ -58,8 +46,6 @@ int main(int argc, char **argv)
 			}
 		}
 	}
-
-#endif
 
 	return 0;
 }
