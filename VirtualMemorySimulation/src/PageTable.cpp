@@ -13,16 +13,18 @@ PageTable::PageTable() {
 	pageTableElements = new PageTableElement[PAGE_TABLE_ENTRY_COUNT];
 	do { // We use do while here, to prevent overflow
 		pageTableElements[i].valid = false;
+		pageTableElements[i].counter = 0;
 	} while (i++ < (PAGE_TABLE_ENTRY_COUNT - 1));
 }
 int oks = 0;
-int pagefaults=0;
+int pagefaults = 0;
 
 /*
  * translate the pointer to frame number
  */
 STATUS PageTable::getFrameNumber(const PAGENUM pageNumber,
 		FRAMENUM* frameNumber) {
+	std::cout << "===============" << std::endl;
 	STATUS status = getPointer(pageNumber, frameNumber);
 	if (status == STATUS::OK) {
 		*frameNumber = (pageTableElements[*frameNumber].frameNumber);
@@ -36,7 +38,7 @@ STATUS PageTable::getFrameNumber(const PAGENUM pageNumber,
 				<< std::endl;
 		pagefaults++;
 	}
-	std::cout<<oks<<","<<pagefaults<<std::endl;
+	std::cout << oks << "," << pagefaults << std::endl;
 	return status;
 }
 
@@ -56,14 +58,29 @@ FRAMENUM PageTable::getLRUVictim() {
 		}
 
 	} while (i++ < (PAGE_TABLE_ENTRY_COUNT - 1));
-	std::cout << "LRU Victim! " << (int) leastUsed << std::endl;
+	std::cout << "===============" << std::endl;
+	std::cout << "LRU Victim! " << (int) pageTableElements[leastUsed].counter << std::endl;
+
+	int z = 0;
+	do {
+		std::cout << (int) pageTableElements[z].counter << ",";
+
+	} while (z++ < (PAGE_TABLE_ENTRY_COUNT - 1));
+	std::cout << std::endl;
+	z=0;
+	do {
+		std::cout << (int) pageTableElements[z].pageNumber << ",";
+
+	} while (z++ < (PAGE_TABLE_ENTRY_COUNT - 1));
+	std::cout << std::endl;
+
 	return pageTableElements[leastUsed].frameNumber;
 }
 
 void PageTable::setPageFrameNumber(const PAGENUM pageNumber,
 		const FRAMENUM frameNumber) {
-
-	std::cout << "setpageNumber =" << (int) pageNumber << " OK" << std::endl;
+	std::cout << "===============" << std::endl;
+	std::cout << "setpageNumber =" << (int) pageNumber << std::endl;
 	FRAMENUM i = 0;
 	PAGENUM leastUsed = 0;
 	do {
@@ -72,25 +89,25 @@ void PageTable::setPageFrameNumber(const PAGENUM pageNumber,
 			pageTableElements[i].pageNumber = pageNumber;
 			pageTableElements[i].frameNumber = frameNumber;
 			pageTableElements[i].valid = true;
-			pageTableElements[i].counter = (PAGE_SIZE - 1);
+			pageTableElements[i].counter = (PAGE_TABLE_ENTRY_COUNT - 1);
 			return;
 		}
 //			 This is to get the LRU. Only reachable if the "if" statement above is not fulfilled.
 		if (pageTableElements[i].valid
 				&& (pageTableElements[i].counter
-						</*>*/ pageTableElements[leastUsed].counter)) {
+						< /*>*/pageTableElements[leastUsed].counter)) {
 			leastUsed = i;
 		}
 
 	} while (i++ < (PAGE_TABLE_ENTRY_COUNT - 1));
 	// If we reach here, there is no null or invalid elements in pageTableElements[], so we need
 	// to use LRU
-	decreaseLRUCounter(leastUsed);
+	decreaseLRUCounter(pageTableElements[leastUsed].counter);
 	std::cout << "LRU Used! " << (int) leastUsed << std::endl;
 	pageTableElements[leastUsed].pageNumber = pageNumber;
 	pageTableElements[leastUsed].frameNumber = frameNumber;
 	pageTableElements[leastUsed].valid = true;
-	pageTableElements[leastUsed].counter = (PAGE_SIZE - 1);
+	pageTableElements[leastUsed].counter = (PAGE_TABLE_ENTRY_COUNT - 1);
 }
 
 /**
@@ -100,7 +117,7 @@ void PageTable::decreaseLRUCounter(const uint8_t startFrom) {
 	std::cout << "LRU count! " << (int) startFrom << std::endl;
 	FRAMENUM i = 0;
 	do { // We use do while here, to prevent overflow
-		if (pageTableElements[i].valid
+		if ((pageTableElements[i].counter != 0)
 				&& (pageTableElements[i].counter > startFrom)) { // We just edit pageTableElements, no need to delete
 			--(pageTableElements[i].counter);
 		}
@@ -108,6 +125,7 @@ void PageTable::decreaseLRUCounter(const uint8_t startFrom) {
 }
 
 void PageTable::invalidate(const PAGENUM pageNumber) {
+	std::cout << "invalidate " << (int) pageNumber;
 	FRAMENUM i = 0;
 	do { // We use do while here, to prevent overflow
 		if ((pageTableElements[i].pageNumber) == pageNumber) { // We just edit pageTableElements, no need to delete
@@ -127,7 +145,7 @@ STATUS PageTable::getPointer(const PAGENUM pageNumber, FRAMENUM* pointer) {
 			if (pageTableElements[i].valid) {
 				*pointer = i;
 				decreaseLRUCounter(pageTableElements[i].counter);
-				pageTableElements[i].counter = PAGE_SIZE - 1;
+				pageTableElements[i].counter = PAGE_TABLE_ENTRY_COUNT - 1;
 				return STATUS::OK;
 			} else {
 				return STATUS::PAGEFAULT;
