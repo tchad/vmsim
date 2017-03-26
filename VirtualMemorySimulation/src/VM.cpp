@@ -63,7 +63,7 @@ bool VM::Result::operator ==(const VM::Result& r) const {
 				return false;
 			}
 		} else {
-			if( _data[i].vAddr != (*rData)[i].vAddr ||
+			if(/* _data[i].vAddr != (*rData)[i].vAddr */
 				_data[i].value != (*rData)[i].value) {
 				return false;
 			}
@@ -197,12 +197,15 @@ STATUS VM::handlePageFault(BackingStore& bs, MM& mm, PageTable& pt,
 	//TODO: this is the very first implementation to memory management for now we assume that we will not ran out of memory
 	STATUS ret = STATUS::FAILED;
 
-	if(STATUS::OK == mm.obtainFreeFrame(framenum)){
-		byte* frameAddr = mm.frameAddr(framenum);
-		if(STATUS::OK == bs.retriveFrame(pagenum, frameAddr)) {
-			pt.setPageFrameNumber(pagenum, framenum);
-			ret = STATUS::OK;
-		}
+
+	if(STATUS::OK != mm.obtainFreeFrame(framenum)){
+		framenum = pt.getLRUVictim();
+	}
+
+	byte* frameAddr = mm.frameAddr(framenum);
+	if(STATUS::OK == bs.retriveFrame(pagenum, frameAddr)) {
+		pt.setPageFrameNumber(pagenum, framenum);
+		ret = STATUS::OK;
 	}
 
 	return ret;
