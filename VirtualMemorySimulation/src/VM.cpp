@@ -96,6 +96,7 @@ VM::Result VM::simulate(const std::string& addresses)
 		if(status == STATUS::OK) {
 			MM mm;
 			PageTable pt;
+			TLB tlb;
 
 			while(result.status() == STATUS::OK && !istream.eof()) {
 				VADDR vaddr;
@@ -113,23 +114,30 @@ VM::Result VM::simulate(const std::string& addresses)
 				page = getPageNumber(vaddr);
 				offset = getOffsetNumber(vaddr);
 
-				//TODO: TLB lookup, add here;
-				status = pt.getFrameNumber(page, &frame);
+				TLB::TLBSTATUS tlbstatus = tlb.getFrameNumber(page, &frame);
 
-				switch(status) {
-				case STATUS::OK: //nothing to be done here
-					break;
-				case STATUS::PAGEFAULT: //exception, pagefault
-					status = VM::handlePageFault(bs, mm, pt, page, frame);
-					if(status != STATUS::OK) {
+				if (tlbstatus == TLB::MISS)
+				{
+					status = pt.getFrameNumber(page, &frame);
+
+					switch(status) {
+					case STATUS::OK: //nothing to be done here
+						tlb.setPageFrameNumber(page, frame);
+						break;
+					case STATUS::PAGEFAULT: //exception, pagefault
+						status = VM::handlePageFault(bs, mm, pt, page, frame);
+						tlb.setPageFrameNumber(page, frame);
+						if(status != STATUS::OK) {
+							result.setStatus(STATUS::FAILED);
+							continue;
+						}
+						break;
+					default: // implementation error
 						result.setStatus(STATUS::FAILED);
 						continue;
 					}
-					break;
-				default: // implementation error
-					result.setStatus(STATUS::FAILED);
-					continue;
 				}
+
 
 				paddr = combineAddr(frame, offset);
 				data = mm.getByte(paddr);
