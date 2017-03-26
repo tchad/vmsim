@@ -10,8 +10,18 @@
 #include <iostream>
 
 #include "VM.h"
+#include "Timings.h"
 
 using namespace std;
+
+void printStats(VM::Result &result)
+{
+	cout << "TLB Hit: " << result.getTLBStats().hitCount
+			<< " Miss: " << result.getTLBStats().missCount << endl;
+	cout << "PT Hit: " << result.getPtStats().hitCount
+			<< " Miss: " << result.getPtStats().missCount << endl;
+
+}
 
 
 int main(int argc, char **argv)
@@ -44,6 +54,7 @@ int main(int argc, char **argv)
 							<< endl;
 				}
 			}
+			printStats(result);
 		}
 	}
 

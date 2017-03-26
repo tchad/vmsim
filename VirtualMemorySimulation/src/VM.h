@@ -42,9 +42,20 @@ public:
 		STATUS status() const;
 
 
+		TLB::STATISTICS getTLBStats();;
+		BackingStore::STATISTICS getBsStats();
+		PageTable::STATISTICS getPtStats();;
+		MM::STATISTICS getMMStats();
+
+
 	private:
 		RESULTDATA _data;
 		STATUS _status = FAILED;
+
+		TLB::STATISTICS _tlbStats;
+		BackingStore::STATISTICS _bsStats;
+		PageTable::STATISTICS _ptStats;
+		MM::STATISTICS _mmStats;
 
 		void append(Itm itm);
 		void setStatus(STATUS status);

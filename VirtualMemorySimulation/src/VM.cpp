@@ -62,7 +62,7 @@ bool VM::Result::operator ==(const VM::Result& r) const {
 				return false;
 			}
 		} else {
-			if(/* _data[i].vAddr != (*rData)[i].vAddr */
+			if( _data[i].vAddr != (*rData)[i].vAddr ||
 				_data[i].value != (*rData)[i].value) {
 				return false;
 			}
@@ -71,6 +71,22 @@ bool VM::Result::operator ==(const VM::Result& r) const {
 	}
 
 	return true;
+}
+
+TLB::STATISTICS VM::Result::getTLBStats() {
+	return _tlbStats;
+}
+
+BackingStore::STATISTICS VM::Result::getBsStats() {
+	return _bsStats;
+}
+
+PageTable::STATISTICS VM::Result::getPtStats() {
+	return _ptStats;
+}
+
+MM::STATISTICS VM::Result::getMMStats() {
+	return _mmStats;
 }
 
 void VM::Result::setStatus(STATUS status) {
@@ -143,6 +159,10 @@ VM::Result VM::simulate(const std::string& addresses)
 
 				result.append({vaddr, paddr, data});
 			}
+			result._bsStats = bs.getStats();
+			result._tlbStats = tlb.getStats();
+			result._mmStats = mm.getStats();
+			result._ptStats = pt.getStats();
 		} else {
 			result.setStatus(STATUS::FAILED);
 		}
