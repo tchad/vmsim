@@ -66,7 +66,8 @@ void TLB::setPageFrameNumber(const PAGENUM pageNumber,
 	bool duplicate = false;
 
 	for (uint32_t i = 0; i < idx; ++i){
-		if (data[i].pageNumber == pageNumber && data[i].validMarker == true){
+		if (data[i].validMarker == false){
+			idx = i;
 			duplicate = true;
 			break;
 		}
@@ -109,6 +110,13 @@ void TLB::invalidate() {
 	for (uint32_t i = 0; i < TLB_ENTRY; ++i)
 	{
 		data[i].validMarker = false;
+	}
+}
+
+void TLB::invalidate(const PAGENUM pageNumber) {
+	for(uint32_t i=0; i< TLB_ENTRY; ++i){
+		if(data[i].pageNumber == pageNumber)
+			data[i].validMarker = false;
 	}
 }
 

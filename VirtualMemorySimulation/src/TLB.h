@@ -28,6 +28,7 @@ public:
 	void setPageFrameNumber(const PAGENUM pageNumber,const FRAMENUM frameNumber);
 //	void setInvalid(const PAGENUM pageNumber);
 	void invalidate();
+	void invalidate(const PAGENUM pageNumber);
 	STATISTICS getStats() const;
 private:
 	/**

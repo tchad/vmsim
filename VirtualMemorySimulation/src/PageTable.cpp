@@ -82,7 +82,7 @@ FRAMENUM PageTable::getLRUVictim(PAGENUM *pageNumber) {
 //
 //	} while (z++ < (PAGE_TABLE_ENTRY_COUNT - 1));
 //	std::cout << std::endl;
-	pageNumber = pageTableElements[leastUsed].pageNumber;
+	*pageNumber = pageTableElements[leastUsed].pageNumber;
 	return pageTableElements[leastUsed].frameNumber;
 }
 

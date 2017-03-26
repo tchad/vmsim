@@ -125,8 +125,7 @@ VM::Result VM::simulate(const std::string& addresses)
 						tlb.setPageFrameNumber(page, frame);
 						break;
 					case STATUS::PAGEFAULT: //exception, pagefault
-						status = VM::handlePageFault(bs, mm, pt, page, frame);
-						tlb.setPageFrameNumber(page, frame);
+						status = VM::handlePageFault(bs, mm, pt, tlb, page, frame);
 						if(status != STATUS::OK) {
 							result.setStatus(STATUS::FAILED);
 							continue;
@@ -190,20 +189,24 @@ VM::Result VM::controlDataFromFile(const std::string& ctrl) {
 	return ret;
 }
 
-STATUS VM::handlePageFault(BackingStore& bs, MM& mm, PageTable& pt,
+STATUS VM::handlePageFault(BackingStore& bs, MM& mm, PageTable& pt, TLB& tlb,
 		PAGENUM pagenum, FRAMENUM& framenum)
 {
 	//TODO: this is the very first implementation to memory management for now we assume that we will not ran out of memory
 	STATUS ret = STATUS::FAILED;
 
+//						tlb.setPageFrameNumber(page, frame);
 
 	if(STATUS::OK != mm.obtainFreeFrame(framenum)){
-		framenum = pt.getLRUVictim();
+		PAGENUM victimPage;
+		framenum = pt.getLRUVictim(&victimPage);
+		tlb.invalidate(victimPage);
 	}
 
 	byte* frameAddr = mm.frameAddr(framenum);
 	if(STATUS::OK == bs.retriveFrame(pagenum, frameAddr)) {
 		pt.setPageFrameNumber(pagenum, framenum);
+		tlb.setPageFrameNumber(pagenum,framenum);
 		ret = STATUS::OK;
 	}
 

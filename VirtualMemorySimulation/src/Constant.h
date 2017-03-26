@@ -13,7 +13,7 @@
 /*
  * 2 ^ 8 PAGE_TABLE_ENTRY
  */
-constexpr uint32_t PAGE_TABLE_ENTRY_COUNT = 5;
+constexpr uint32_t PAGE_TABLE_ENTRY_COUNT = 128;
 
 /**
  * Number of int required for invalidate fields

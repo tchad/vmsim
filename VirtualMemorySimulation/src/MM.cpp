@@ -15,9 +15,7 @@ MM::MM() {
 	FRAMENUM fnum = 0;
 	do{
 		_freeFrameList.push(fnum);
-		++fnum;
-
-	} while(fnum < (PAGE_TABLE_ENTRY_COUNT));
+	} while(fnum++ < (PAGE_TABLE_ENTRY_COUNT-1));
 }
 
 MM::~MM() {

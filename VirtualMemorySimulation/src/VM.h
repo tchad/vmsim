@@ -16,7 +16,7 @@ public:
 	class Result;
 	static Result simulate(const std::string &addresses);
 	static Result controlDataFromFile(const std::string &ctrl);
-	static STATUS handlePageFault(BackingStore &bs, MM &mm, PageTable &pt, PAGENUM pagenum, FRAMENUM &framenum);
+	static STATUS handlePageFault(BackingStore &bs, MM &mm, PageTable &pt, TLB& tlb, PAGENUM pagenum, FRAMENUM &framenum);
 
 	class Result final {
 	public:
