@@ -41,15 +41,15 @@ STATUS PageTable::getFrameNumber(const PAGENUM pageNumber,
 		STATS.missCount++;
 	}
 
-	if (status == STATUS::OK) {
-		std::cout << "getpageNumber =" << (int) pageNumber << " OK"
-				<< std::endl;
-		oks++;
-	} else {
-		std::cout << "getpageNumber =" << (int) pageNumber << " PageFault"
-				<< std::endl;
-		pagefaults++;
-	}
+//	if (status == STATUS::OK) {
+//		std::cout << "getpageNumber =" << (int) pageNumber << " OK"
+//				<< std::endl;
+//		oks++;
+//	} else {
+//		std::cout << "getpageNumber =" << (int) pageNumber << " PageFault"
+//				<< std::endl;
+//		pagefaults++;
+//	}
 //	std::cout << oks << "," << pagefaults << std::endl;
 	return status;
 }
