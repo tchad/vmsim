@@ -61,32 +61,32 @@ void TLB::setPageFrameNumber(const PAGENUM pageNumber,
 	STATS.setFrameCount++;
 	uint32_t idx = (replaceActive == true) ? TLB_ENTRY : replacementIdx;
 	bool duplicate = false;
-	std::cout<< "Entry1"<<std::endl;
+//	std::cout<< "Entry1"<<std::endl;
 	for (uint32_t i = 0; i < idx; ++i) {
 		if (data[i].validMarker == false) {
 			idx = i;
-			std::cout<< "Entry2="<< (int)i<< " " << replacementIdx << std::endl;
+//			std::cout<< "Entry2="<< (int)i<< " " << replacementIdx << std::endl;
 			duplicate = true;
 			break;
 		}
 	}
-	std::cout<< "Exit3"<<std::endl;
+//	std::cout<< "Exit3"<<std::endl;
 	if (duplicate == false) {
 		idx = replacementIdx;
 		if (replaceActive == false) {
 			replacementIdx++;
-			std::cout << "AAA" << replacementIdx << std::endl;
+//			std::cout << "AAA" << replacementIdx << std::endl;
 			if (replacementIdx >= TLB_ENTRY) {
 				replacementIdx = 0;
 				replaceActive = true;
 			}
 		} else {
 			replacementIdx = (replacementIdx+1) % TLB_ENTRY;
-			std::cout << "BBB" << replacementIdx << std::endl;
+//			std::cout << "BBB" << replacementIdx << std::endl;
 		}
 
 	}
-	std::cout << "ccc" << (int)idx << std::endl;
+//	std::cout << "ccc" << (int)idx << std::endl;
 	data[idx].validMarker = true;
 	data[idx].pageNumber = pageNumber;
 	data[idx].frameNumber = frameNumber;
