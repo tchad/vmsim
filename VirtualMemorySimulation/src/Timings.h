@@ -9,6 +9,7 @@ constexpr uint32_t MM_ADD_FRAME_POOL = 100; //100ns
 constexpr uint32_t MM_OBTAIN_FREE_FRAME = 100; //100ns
 constexpr uint32_t PT_SEARCH = 100000; //100us
 constexpr uint32_t TLB_SEARCH = 10000; //10us
+constexpr uint32_t MM_ACCESS = 10000; //10us
 
 
 
