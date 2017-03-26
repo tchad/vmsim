@@ -57,3 +57,7 @@ MM::STATISTICS::STATISTICS(){
 	addFreeFrameCount=0;
 	obtainFreeFrameCount=0;
 }
+
+MM::STATISTICS MM::getStats() const {
+	return STATS;
+}

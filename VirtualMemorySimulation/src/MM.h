@@ -29,6 +29,7 @@ public:
 
 	STATUS addFreeFrame(FRAMENUM framenum);
 	STATUS obtainFreeFrame(FRAMENUM &framenum);
+	STATISTICS getStats() const;
 
 private:
 	byte* mainMemory;
