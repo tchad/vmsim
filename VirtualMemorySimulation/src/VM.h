@@ -9,6 +9,7 @@
 #include "BackingStore.h"
 #include "MM.h"
 #include "PageTable.h"
+#include "TLB.h"
 
 class VM final {
 public:
