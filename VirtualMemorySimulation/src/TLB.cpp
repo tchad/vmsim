@@ -6,17 +6,22 @@
  */
 
 #include "TLB.h"
+#include <iostream>
 
-TLB::TLB() {
-	FRAMENUM i = 0;
-	do {
-		pageNumber[i] = 0;
-		frameNumber[i] = 0;
 
-	} while (i++ < (TLB_ENTRY - 1));
-	validMarker = 0;
-	pointer = 0;
+
+TLB::TLB():replacementIdx(0), replaceActive(false) {
+
+	invalidate();
+
 }
+
+TLB::STATISTICS::STATISTICS() :
+		hitCount(0),
+		missCount(0),
+		getFrameCount(0),
+		setFrameCount(0)
+{}
 
 /**
  * This function will get the frame number from TLB. If not exist, it
@@ -24,13 +29,25 @@ TLB::TLB() {
  * @param  pageNumber  a page you use to get the frame number
  * @return   CharResult   The result + error code with boolean
  */
-STATUS TLB::getFrameNumber(const PAGENUM pageNumber,
-		FRAMENUM* frameNumber) const {
-	STATUS status = getPointer(pageNumber, frameNumber);
-	if (status == STATUS::OK) {
-		*frameNumber = frameNumber[(*frameNumber)]; // Replace the pointer with frameNumber
-	}
-	return status;
+TLB::TLBSTATUS TLB::getFrameNumber(const PAGENUM pageNumber,
+		FRAMENUM* frameNumber) {
+		TLBSTATUS ret = TLBSTATUS::MISS;
+		STATS.getFrameCount++;
+
+		for (uint32_t i=0; i < TLB_ENTRY; ++i){
+			if (pageNumber == data[i].pageNumber && data[i].validMarker == true){
+				*frameNumber = data[i].frameNumber;
+				ret = TLBSTATUS::HIT;
+			}
+		}
+
+		if(ret == TLBSTATUS::HIT){
+			STATS.hitCount++;
+		}else{
+			STATS.missCount++;
+		}
+
+		return ret;
 }
 
 /**
@@ -40,11 +57,38 @@ STATUS TLB::getFrameNumber(const PAGENUM pageNumber,
  */
 void TLB::setPageFrameNumber(const PAGENUM pageNumber,
 		const FRAMENUM frameNumber) {
-	this->pageNumber[pointer] = pageNumber;
-	this->frameNumber[pointer] = frameNumber;
-	validMarker |= (1 << pointer);
-	pointer = (pointer + 1) % TLB_ENTRY;
 
+	// If page number already exists, then update without moving index
+	// If tlb is unpopulated then we fill it
+	// If fully populated then replace data and move index
+	STATS.setFrameCount++;
+	uint32_t idx = (replaceActive == true) ? TLB_ENTRY : replacementIdx;
+	bool duplicate = false;
+
+	for (uint32_t i = 0; i < idx; ++i){
+		if (data[i].pageNumber == pageNumber && data[i].validMarker == true){
+			duplicate = true;
+			break;
+		}
+	}
+
+	if (duplicate == false){
+		idx = replacementIdx;
+		if(replaceActive == false){
+			replacementIdx++;
+			if (replacementIdx >= TLB_ENTRY){
+				replacementIdx = 0;
+				replaceActive = true;
+			}
+		}else{
+			replacementIdx = (replacementIdx++) % TLB_ENTRY;
+		}
+
+	}
+
+	data[idx].validMarker = true;
+	data[idx].pageNumber = pageNumber;
+	data[idx].frameNumber = frameNumber;
 }
 
 /*
@@ -62,34 +106,12 @@ void TLB::setPageFrameNumber(const PAGENUM pageNumber,
  * @param  pageNumber  a page you use to set invalid value
  */
 void TLB::invalidate() {
-	validMarker = 0;
+	for (uint32_t i = 0; i < TLB_ENTRY; ++i)
+	{
+		data[i].validMarker = false;
+	}
 }
 
-/**
- * This function will get the position of pageNumber from TLB. If not exist, it
- * will return 0, and false for boolean. (Internal use only!)
- * @param  pageNumber  a page you use to get the frame number
- * @return   CharResult   The result + error code with boolean
- */
-STATUS TLB::getPointer(const PAGENUM pageNumber, FRAMENUM* pointer) const {
-// This for loops will search from the newest added item at pointer to 0
-	uint8_t i = (*pointer) - 1;
-	for (; i >= 0; --i) {
-		if ((validMarker >> i) & 1) { // only enter when the valid is 1.
-			if (this->pageNumber[i] == pageNumber) { // TLB Hit.
-				*pointer = i;
-				return STATUS::OK;
-			}
-		}
-	}
-	for (i = TLB_ENTRY; i >= (*pointer); --i) {
-		if ((validMarker >> i) & 1) { // only enter when the valid is 1.
-			if (this->pageNumber[i] == pageNumber) { // TLB Hit.
-				*pointer = i;
-				return STATUS::OK;
-			}
-		}
-
-	}
-	return STATUS::PAGEFAULT;
+TLB::STATISTICS TLB::getStats() const {
+	return STATS;
 }

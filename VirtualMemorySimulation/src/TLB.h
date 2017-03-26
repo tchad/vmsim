@@ -10,21 +10,40 @@
 #include "Constant.h"
 class TLB {
 public:
+	enum TLBSTATUS{
+		HIT,
+		MISS
+	};
+	struct STATISTICS{
+		uint32_t hitCount;
+		uint32_t missCount;
+		uint32_t getFrameCount;
+		uint32_t setFrameCount;
+		STATISTICS();
+
+	};
+
 	TLB();
-	STATUS getFrameNumber(const PAGENUM pageNumber, FRAMENUM* frameNumber) const;
+	TLBSTATUS getFrameNumber(const PAGENUM pageNumber, FRAMENUM* frameNumber);
 	void setPageFrameNumber(const PAGENUM pageNumber,const FRAMENUM frameNumber);
 //	void setInvalid(const PAGENUM pageNumber);
 	void invalidate();
+	STATISTICS getStats() const;
 private:
 	/**
 	 * Initialization of this variable is on the constructor.
+	 * tlb hits, misses, getframenumber and setpageframenumber
 	 */
-	PAGENUM pageNumber[TLB_ENTRY];
-	FRAMENUM frameNumber[TLB_ENTRY];
-	uint16_t validMarker; // Contains the valid bit for above array.
-	                            // The rightmost bit is for pageNumber 0.
-	uint8_t pointer;
-	STATUS getPointer(const PAGENUM pageNumber, FRAMENUM* pointer) const;
+	struct {
+		bool validMarker;
+		PAGENUM pageNumber;
+		FRAMENUM frameNumber;
+
+	} data[TLB_ENTRY];
+	uint32_t replacementIdx;
+	bool replaceActive;
+	STATISTICS STATS;
+
 };
 
 #endif /* TLB_H_ */
