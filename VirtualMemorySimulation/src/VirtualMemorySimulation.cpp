@@ -8,6 +8,7 @@
 
 #include <string>
 #include <iostream>
+#include <iomanip>
 
 #include "VM.h"
 #include "Timings.h"
@@ -20,7 +21,9 @@ void printStats(VM::Result &result)
 			<< " Miss: " << result.getTLBStats().missCount << endl;
 	cout << "PT Hit: " << result.getPtStats().hitCount
 			<< " Miss: " << result.getPtStats().missCount << endl;
-
+	cout << "Average time: " << fixed << setprecision(3) <<
+			totalTime(result)/(result.getTLBStats().hitCount +
+					result.getTLBStats().missCount) / 1000 << "us" << endl;
 }
 
 
