@@ -9,11 +9,20 @@
 #include <iostream>
 
 TLB::TLB() :
-		replacementIdx(0), replaceActive(false) {
+	data(new Data_t[TLB_ENTRY]),
+	replacementIdx(0),
+	replaceActive(false)
+{
 
 	invalidate();
 
+
 }
+
+TLB::~TLB() {
+	delete [] data;
+}
+
 
 TLB::STATISTICS::STATISTICS() :
 		hitCount(0), missCount(0), getFrameCount(0), setFrameCount(0) {

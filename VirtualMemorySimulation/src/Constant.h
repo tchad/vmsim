@@ -13,7 +13,7 @@
 /*
  * 2 ^ 8 PAGE_TABLE_ENTRY
  */
-constexpr uint32_t PAGE_TABLE_ENTRY_COUNT = 64;
+extern uint32_t PAGE_TABLE_ENTRY_COUNT;
 
 /**
  * Number of int required for invalidate fields
@@ -29,7 +29,7 @@ constexpr uint32_t PAGE_TABLE_ENTRY_COUNT = 64;
  * You cannot change the TLB_ENTRY, otherwise you need to
  * change the length of unsigned short validMarker; in the TLB.h
  */
-constexpr uint32_t TLB_ENTRY = 16;
+extern uint32_t TLB_ENTRY;
 
 /*
  * 2 ^ 8 * 8 PAGE_SIZE = 256 Bytes = 2048 bit
@@ -58,6 +58,9 @@ enum STATUS {
 
 
 
-constexpr char BACKING_STORE_FILE[] = "BACKING_STORE.bin";
+extern char BACKING_STORE_FILE[256];
+extern bool VERIFY_FRAME;
+extern char TEST_INPUT[256];
+extern char TEST_VALIDATION_DATA[256];
 
 #endif /* CONSTANT_H_ */

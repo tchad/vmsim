@@ -50,23 +50,24 @@ bool VM::Result::operator ==(const VM::Result& r) const {
 	}
 
 	const VM::Result::RESULTDATA* rData = r.data();
-	for(VM::Result::size_type i=0; i<_data.size(); ++i){
-		/*
-		 * NOTE: The verification set were based on page table containing 256 entries
-		 * If we use smaller size cannot compare physical address as it will be different.
-		 */
-		if(PAGE_TABLE_ENTRY_COUNT == 256) {
+	if(VERIFY_FRAME== true) {
+		for(VM::Result::size_type i=0; i<_data.size(); ++i){
+			/*
+			 * NOTE: The verification set were based on page table containing 256 entries
+			 * If we use smaller size cannot compare physical address as it will be different.
+			 */
 			if(_data[i].pAddr != (*rData)[i].pAddr ||
 				_data[i].vAddr != (*rData)[i].vAddr ||
 				_data[i].value != (*rData)[i].value) {
 				return false;
 			}
-		} else {
+		}
+	} else {
+		for(VM::Result::size_type i=0; i<_data.size(); ++i){
 			if( _data[i].vAddr != (*rData)[i].vAddr ||
 				_data[i].value != (*rData)[i].value) {
 				return false;
 			}
-
 		}
 	}
 

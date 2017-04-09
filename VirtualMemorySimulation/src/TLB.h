@@ -8,6 +8,7 @@
 #ifndef TLB_H_
 #define TLB_H_
 #include "Constant.h"
+
 class TLB {
 public:
 	enum TLBSTATUS{
@@ -24,6 +25,7 @@ public:
 	};
 
 	TLB();
+	~TLB();
 	TLBSTATUS getFrameNumber(const PAGENUM pageNumber, FRAMENUM* frameNumber);
 	void setPageFrameNumber(const PAGENUM pageNumber,const FRAMENUM frameNumber);
 //	void setInvalid(const PAGENUM pageNumber);
@@ -35,12 +37,13 @@ private:
 	 * Initialization of this variable is on the constructor.
 	 * tlb hits, misses, getframenumber and setpageframenumber
 	 */
-	struct {
+	struct  Data_t{
 		bool validMarker;
 		PAGENUM pageNumber;
 		FRAMENUM frameNumber;
 
-	} data[TLB_ENTRY];
+	};
+	Data_t *data;
 	uint32_t replacementIdx;
 	bool replaceActive;
 	STATISTICS STATS;
