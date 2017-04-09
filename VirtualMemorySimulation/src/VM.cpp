@@ -14,13 +14,21 @@
 
 VM::Result::Result(VM::Result&& r) :
 		_data(std::move(r._data)),
-		_status(r._status)
+		_status(r._status),
+		_tlbStats(r._tlbStats),
+		_bsStats(r._bsStats),
+		_ptStats(r._ptStats),
+		_mmStats(r._mmStats)
 {
 }
 
 VM::Result& VM::Result::operator =(VM::Result&& r)
 {
 	_status = r._status;
+	_tlbStats = r._tlbStats;
+	_bsStats = r._bsStats;
+	_ptStats = r._ptStats;
+	_mmStats = r._mmStats;
 	_data = std::move(r._data);
 	return *this;
 }
