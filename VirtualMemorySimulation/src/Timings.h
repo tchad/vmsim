@@ -1,7 +1,9 @@
-#include <cstdint>
-
 #ifndef TIMINGS_H_
 #define TIMINGS_H_
+
+#include <cstdint>
+
+#include "VM.h"
 
 //All units are in nanoseconds
 constexpr uint32_t PAGE_REPLACE_COST = 100000; //100us

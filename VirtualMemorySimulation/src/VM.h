@@ -1,9 +1,9 @@
+#ifndef VM_H_
+#define VM_H_
+
 #include <string>
 #include <vector>
 #include <type_traits>
-
-#ifndef VM_H_
-#define VM_H_
 
 #include "Constant.h"
 #include "BackingStore.h"
@@ -14,6 +14,7 @@
 class VM final {
 public:
 	class Result;
+
 	static Result simulate(const std::string &addresses);
 	static Result controlDataFromFile(const std::string &ctrl);
 	static STATUS handlePageFault(BackingStore &bs, MM &mm, PageTable &pt, TLB& tlb, PAGENUM pagenum, FRAMENUM &framenum);
@@ -25,6 +26,7 @@ public:
 			PADDR pAddr;
 			byte value;
 		};
+
 		using RESULTDATA = std::vector<Itm>;
 		using size_type = RESULTDATA::size_type;
 
@@ -41,12 +43,10 @@ public:
 		const Itm item(size_type i) const;
 		STATUS status() const;
 
-
 		TLB::STATISTICS getTLBStats();;
 		BackingStore::STATISTICS getBsStats();
 		PageTable::STATISTICS getPtStats();;
 		MM::STATISTICS getMMStats();
-
 
 	private:
 		RESULTDATA _data;

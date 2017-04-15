@@ -1,10 +1,3 @@
-/*
- * util.h
- *
- *  Created on: Mar 9, 2017
- *      Author: udntneed2knw
- */
-
 #ifndef UTIL_H_
 #define UTIL_H_
 

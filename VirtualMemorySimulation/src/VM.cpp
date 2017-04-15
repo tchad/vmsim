@@ -1,26 +1,16 @@
-/*
- * VM.cpp
- *
- *  Created on: Mar 9, 2017
- *      Author: udntneed2knw
- */
-
-
 #include <fstream>
-#include <iostream>
 
 #include "VM.h"
 #include  "util.h"
 
 VM::Result::Result(VM::Result&& r) :
-		_data(std::move(r._data)),
-		_status(r._status),
-		_tlbStats(r._tlbStats),
-		_bsStats(r._bsStats),
-		_ptStats(r._ptStats),
-		_mmStats(r._mmStats)
-{
-}
+	_data(std::move(r._data)),
+	_status(r._status),
+	_tlbStats(r._tlbStats),
+	_bsStats(r._bsStats),
+	_ptStats(r._ptStats),
+	_mmStats(r._mmStats)
+{}
 
 VM::Result& VM::Result::operator =(VM::Result&& r)
 {
@@ -30,6 +20,7 @@ VM::Result& VM::Result::operator =(VM::Result&& r)
 	_ptStats = r._ptStats;
 	_mmStats = r._mmStats;
 	_data = std::move(r._data);
+
 	return *this;
 }
 
@@ -48,11 +39,13 @@ STATUS VM::Result::status() const
 	return _status;
 }
 
-void VM::Result::append(VM::Result::Itm itm) {
+void VM::Result::append(VM::Result::Itm itm)
+{
 	_data.push_back(itm);
 }
 
-bool VM::Result::operator ==(const VM::Result& r) const {
+bool VM::Result::operator ==(const VM::Result& r) const
+{
 	if(this->count() != r.count()) {
 		return false;
 	}
@@ -82,23 +75,28 @@ bool VM::Result::operator ==(const VM::Result& r) const {
 	return true;
 }
 
-TLB::STATISTICS VM::Result::getTLBStats() {
+TLB::STATISTICS VM::Result::getTLBStats()
+{
 	return _tlbStats;
 }
 
-BackingStore::STATISTICS VM::Result::getBsStats() {
+BackingStore::STATISTICS VM::Result::getBsStats()
+{
 	return _bsStats;
 }
 
-PageTable::STATISTICS VM::Result::getPtStats() {
+PageTable::STATISTICS VM::Result::getPtStats()
+{
 	return _ptStats;
 }
 
-MM::STATISTICS VM::Result::getMMStats() {
+MM::STATISTICS VM::Result::getMMStats()
+{
 	return _mmStats;
 }
 
-void VM::Result::setStatus(STATUS status) {
+void VM::Result::setStatus(STATUS status)
+{
 	_status = status;
 }
 
@@ -111,6 +109,7 @@ VM::Result VM::simulate(const std::string& addresses)
 	 * and a failed result object will get returned.
 	 */
 	VM::Result result;
+
 	result.setStatus(STATUS::OK);
 
 	std::ifstream istream(addresses);
@@ -130,6 +129,7 @@ VM::Result VM::simulate(const std::string& addresses)
 				FRAMENUM frame;
 				OFFSET offset;
 				byte data;
+				TLB::TLBSTATUS tlbstatus;
 				std::string buff;
 
 				istream >> buff;
@@ -139,7 +139,7 @@ VM::Result VM::simulate(const std::string& addresses)
 				page = getPageNumber(vaddr);
 				offset = getOffsetNumber(vaddr);
 
-				TLB::TLBSTATUS tlbstatus = tlb.getFrameNumber(page, &frame);
+				tlbstatus = tlb.getFrameNumber(page, &frame);
 
 				if (tlbstatus == TLB::MISS)
 				{
@@ -162,12 +162,11 @@ VM::Result VM::simulate(const std::string& addresses)
 					}
 				}
 
-
 				paddr = combineAddr(frame, offset);
 				data = mm.getByte(paddr);
-
 				result.append({vaddr, paddr, data});
 			}
+
 			result._bsStats = bs.getStats();
 			result._tlbStats = tlb.getStats();
 			result._mmStats = mm.getStats();
@@ -209,7 +208,6 @@ VM::Result VM::controlDataFromFile(const std::string& ctrl) {
 			istream >> sink; //number
 			itm.value = std::stoi(sink);
 
-
 			ret.append(itm);
 		}
 		ret.setStatus(STATUS::OK);
@@ -221,10 +219,8 @@ VM::Result VM::controlDataFromFile(const std::string& ctrl) {
 STATUS VM::handlePageFault(BackingStore& bs, MM& mm, PageTable& pt, TLB& tlb,
 		PAGENUM pagenum, FRAMENUM& framenum)
 {
-	//TODO: this is the very first implementation to memory management for now we assume that we will not ran out of memory
+	//TODO: this implementation we assume that we will not ran out of free frames.
 	STATUS ret = STATUS::FAILED;
-
-//						tlb.setPageFrameNumber(page, frame);
 
 	if(STATUS::OK != mm.obtainFreeFrame(framenum)){
 		PAGENUM victimPage;

@@ -1,10 +1,3 @@
-/*
- * BackingStore.h
- *
- *  Created on: Mar 9, 2017
- *      Author: udntneed2knw
- */
-
 #ifndef BACKINGSTORE_H_
 #define BACKINGSTORE_H_
 
@@ -35,7 +28,6 @@ private:
 	FILE* backingStoreFile = NULL;
 
 	STATISTICS STATS;
-
 };
 
 #endif /* BACKINGSTORE_H_ */

@@ -1,10 +1,3 @@
-/*
- * MM.h
- *
- *  Created on: Mar 9, 2017
- *      Author: udntneed2knw
- */
-
 #ifndef MM_H_
 #define MM_H_
 
@@ -13,7 +6,6 @@
 
 #include "Constant.h"
 
-
 class MM {
 public:
 	struct STATISTICS{
@@ -21,8 +13,10 @@ public:
 		uint32_t obtainFreeFrameCount;
 		STATISTICS();
 	};
+
 	MM();
 	virtual ~MM();
+
 	byte* memBase();
 	byte getByte(PADDR addr);
 	byte* frameAddr(FRAMENUM num);
@@ -34,8 +28,8 @@ public:
 private:
 	byte* mainMemory;
 	std::queue<FRAMENUM, std::list<FRAMENUM> > _freeFrameList;
-	STATISTICS STATS;
 
+	STATISTICS STATS;
 };
 
 #endif /* MM_H_ */

@@ -1,10 +1,3 @@
-/*
- * BackingStore.cpp
- *
- *  Created on: Mar 9, 2017
- *      Author: udntneed2knw
- */
-
 #include "BackingStore.h"
 
 BackingStore::BackingStore() :
@@ -61,10 +54,9 @@ STATUS BackingStore::retriveFrame(PAGENUM page, byte* dst)
 
 BackingStore::STATISTICS::STATISTICS():
 	frameRetrive(0)
+{}
+
+BackingStore::STATISTICS BackingStore::getStats()
 {
-}
-
-BackingStore::STATISTICS BackingStore::getStats() {
 	return STATS;
-
 }

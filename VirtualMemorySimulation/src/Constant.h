@@ -56,8 +56,6 @@ enum STATUS {
 	PAGEFAULT
 };
 
-
-
 extern char BACKING_STORE_FILE[256];
 extern bool VERIFY_FRAME;
 extern char TEST_INPUT[256];

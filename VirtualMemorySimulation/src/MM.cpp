@@ -1,63 +1,65 @@
-/*
- * MM.cpp
- *
- *  Created on: Mar 9, 2017
- *      Author: udntneed2knw
- */
-
 #include "MM.h"
-#include <iostream>
 
-MM::MM() {
-
+MM::MM()
+{
 	mainMemory = new byte [PAGE_TABLE_ENTRY_COUNT*FRAME_SIZE];
 
 	FRAMENUM fnum = 0;
-	do{
+	do {
 		_freeFrameList.push(fnum);
 	} while(fnum++ < (PAGE_TABLE_ENTRY_COUNT-1));
 }
 
-MM::~MM() {
+MM::~MM()
+{
 	delete [] mainMemory;
 }
 
-byte* MM::memBase() {
+byte* MM::memBase()
+{
 	return mainMemory;
 }
 
-byte MM::getByte(PADDR addr) {
-	return *(mainMemory+addr);
+byte MM::getByte(PADDR addr)
+{
+	return * (mainMemory+addr);
 }
 
-byte* MM::frameAddr(FRAMENUM num) {
+byte* MM::frameAddr(FRAMENUM num)
+{
 	return mainMemory+num*FRAME_SIZE;
 }
 
-STATUS MM::addFreeFrame(FRAMENUM framenum) {
-	//TODO: add duplicates detection
+STATUS MM::addFreeFrame(FRAMENUM framenum)
+{
 	_freeFrameList.push(framenum);
+
 	STATS.addFreeFrameCount++;
+
 	return STATUS::OK;
 }
 
-STATUS MM::obtainFreeFrame(FRAMENUM& framenum) {
-	//TODO add proper status
+STATUS MM::obtainFreeFrame(FRAMENUM& framenum)
+{
 	STATUS ret= STATUS::FAILED;
 	if(!_freeFrameList.empty()) {
 		framenum = _freeFrameList.front();
 		_freeFrameList.pop();
 		ret = STATUS::OK;
 	}
+
 	STATS.obtainFreeFrameCount++;
+
 	return ret;
 }
 
-MM::STATISTICS::STATISTICS(){
+MM::STATISTICS::STATISTICS()
+{
 	addFreeFrameCount=0;
 	obtainFreeFrameCount=0;
 }
 
-MM::STATISTICS MM::getStats() const {
+MM::STATISTICS MM::getStats() const
+{
 	return STATS;
 }
