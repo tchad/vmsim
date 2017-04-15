@@ -26,13 +26,9 @@ uint32_t whenTlbMisses(uint32_t tlbMisses, uint32_t ptHits) {
 }
 
 ///Time it takes for MM to get page if there was a page fault
-// Algorithm: TLB search time + main memory access time) * times page is not found in TLB +
-//				(Page replace time + main memory access time) *
-//				times page is not found in PT
 uint32_t whenPageFault(uint32_t tlbMisses, uint32_t ptMisses) {
 	uint32_t result;
-	result = (TLB_SEARCH + MM_ACCESS) * tlbMisses +
-			(PAGE_REPLACE_COST + MM_ACCESS) * ptMisses;
+	result = (PAGE_REPLACE_COST + 2*MM_ACCESS + TLB_SEARCH) * ptMisses;
 	return result;
 }
 

@@ -26,9 +26,11 @@ void printStats(VM::Result &result)
 			<< " Miss: " << result.getTLBStats().missCount << endl;
 	cout << "PT Hit: " << result.getPtStats().hitCount
 			<< " Miss: " << result.getPtStats().missCount << endl;
-	cout << "Average time: " << fixed << setprecision(3) <<
-			totalTime(result)/(result.getTLBStats().hitCount +
-					result.getTLBStats().missCount) / result.count() << "us" << endl;
+	cout << "Total Time: " << totalTime(result) << endl;
+	cout << "Number of Fetches: " << result.count() << endl;
+	cout << "Effective Access Time: " << fixed << setprecision(3) <<
+			totalTime(result)/result.count() << "ns" << endl;
+
 }
 
 void printUsage()
