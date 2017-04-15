@@ -80,7 +80,7 @@ if __name__ == "__main__":
 #             This gentestdata2 int.from_bytes method is not available in the Python 2.7.12, So use the workaround 
 #             val = int.from_bytes(byte, byteorder="big", signed=True)
             val = int(codecs.encode(byte, 'hex'), 16)
-            if(val > 128):  # The val produced is unsigned, change iit to 
+            if(val > 128):  # The val produced is unsigned, change it to signed 
                 val = (256 - val) * -1
             outstr = "Virtual address: " + str(addr) + " Physical address: 0 Value: " + str(val) + "\n"
             fcorrect.write(outstr)
