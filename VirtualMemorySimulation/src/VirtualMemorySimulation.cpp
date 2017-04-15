@@ -1,22 +1,16 @@
-//============================================================================
-// Name        : VirtualMemorySimulation.cpp
-// Author      : 
-// Version     :
-// Copyright   : 
-// Description : Hello World in C++, Ansi-style
-//============================================================================
-
-#include <string>
-#include <iostream>
-#include <iomanip>
-#include <cstring>
 #include <getopt.h>
 #include <cstdlib>
 #include <cmath>
 
+#include <cstring>
+#include <string>
+
+#include <iostream>
+#include <iomanip>
+
 #include "Constant.h"
-#include "VM.h"
 #include "Timings.h"
+#include "VM.h"
 
 using namespace std;
 
@@ -30,7 +24,6 @@ void printStats(VM::Result &result)
 	cout << "Number of Fetches: " << result.count() << endl;
 	cout << "Effective Access Time: " << fixed << setprecision(3) <<
 			totalTime(result)/result.count() << "ns" << endl;
-
 }
 
 void printUsage()
@@ -42,7 +35,6 @@ void printUsage()
 	cout << "\t h, help\t- print this dialog\n";
 	cout << "\t b, bs\t\t- specify non-default backing storage [Default: BACKING_STORAGE.bin]\n";
 	cout << "\t f, cmpframe\t- enable frame number comparison(test data must support that) [Default: N]\n";
-
 }
 
 int processArguments(int argc, char **argv)
@@ -60,14 +52,17 @@ int processArguments(int argc, char **argv)
 	};
 
 	int option;
+
 	do {
 		int opt_idx;
+
 		option = getopt_long(argc, argv, shortoptions, long_options, &opt_idx);
 
 		switch(option) {
 		case 't':
 			{
 				int result = atoi(optarg);
+
 				if(result <= 0 || (log2(result) != int(log2(result)))) {
 					cerr << "Invalid TLB size\n";
 					return -1;
@@ -78,6 +73,7 @@ int processArguments(int argc, char **argv)
 		case 'p':
 			{
 				int result = atoi(optarg);
+
 				if(result <= 0 || (log2(result) != int(log2(result)))) {
 					cerr << "Invalid Page Table size\n";
 					return -1;
@@ -127,6 +123,7 @@ int processArguments(int argc, char **argv)
 	//tlb < pt
 	if(PAGE_TABLE_ENTRY_COUNT < TLB_ENTRY) {
 		cerr << "TLB cannot be larger than Page Table\n";
+
 		return -1;
 	}
 
@@ -135,8 +132,10 @@ int processArguments(int argc, char **argv)
 		strcpy(TEST_INPUT, argv[optind]);
 	} else {
 		cerr << "Missing test input data\n";
+
 		return -1;
 	}
+
 	return 0;
 }
 
@@ -151,6 +150,7 @@ int main(int argc, char **argv)
 			if(strlen(TEST_VALIDATION_DATA) > 0) {
 				//compare with control data
 				cout << "Comparing with control data: ";
+
 				VM::Result controlData(VM::controlDataFromFile(TEST_VALIDATION_DATA));
 				if(controlData == result) {
 					cout << "MATCH!\n";
@@ -168,10 +168,10 @@ int main(int argc, char **argv)
 							<< endl;
 				}
 			}
+
 			printStats(result);
 		}
 	}
-
 
 	return 0;
 }

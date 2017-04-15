@@ -1,6 +1,5 @@
 #include "Constant.h"
 
-
 uint32_t PAGE_TABLE_ENTRY_COUNT = 256;
 uint32_t TLB_ENTRY = 16;
 bool VERIFY_FRAME = false;
