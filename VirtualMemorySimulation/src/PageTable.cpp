@@ -23,8 +23,6 @@ PageTable::STATISTICS::STATISTICS() :
 		getFrameCount(0),
 		setFrameCount(0)
 {}
-int oks = 0;
-int pagefaults = 0;
 
 /*
  * translate the pointer to frame number
