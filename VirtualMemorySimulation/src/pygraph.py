@@ -35,8 +35,8 @@ with open(filename, 'r') as f:
             lin_y[int(val_x)-1].append(val_z)
     
     fig = plt.figure()
-    gs = gridspec.GridSpec(8,8)
-    ax = fig.add_subplot(gs[0:7,0:6], projection='3d')
+    gs = gridspec.GridSpec(6,4)
+    ax = fig.add_subplot(gs[0:3,0:3], projection='3d')
     ax.invert_yaxis()
 
     ax.scatter(x, y, z, c='r', marker='o')
@@ -47,46 +47,47 @@ with open(filename, 'r') as f:
     ax.set_ylabel('TLB(log2(size))')
     ax.set_zlabel('EAT (ns)')
 
-    bx = fig.add_subplot(gs[0,7])
+    bx = fig.add_subplot(gs[4,0])
     bx.scatter(lin_x[0], lin_y[0])
     bx.set_xlabel("TLB")
     bx.set_ylabel('EAT (ns)')
 
-    bx = fig.add_subplot(gs[1,7])
+    bx = fig.add_subplot(gs[4,1])
     bx.scatter(lin_x[1], lin_y[1])
     bx.set_xlabel("TLB")
     bx.set_ylabel('EAT (ns)')
 
-    bx = fig.add_subplot(gs[2,7])
+    bx = fig.add_subplot(gs[4,2])
     bx.scatter(lin_x[2], lin_y[2])
     bx.set_xlabel("TLB")
     bx.set_ylabel('EAT (ns)')
 
-    bx = fig.add_subplot(gs[3,7])
+    bx = fig.add_subplot(gs[4,3])
     bx.scatter(lin_x[3], lin_y[3])
     bx.set_xlabel("TLB")
     bx.set_ylabel('EAT (ns)')
 
-    bx = fig.add_subplot(gs[4,7])
+    bx = fig.add_subplot(gs[5,0])
     bx.scatter(lin_x[4], lin_y[4])
     bx.set_xlabel("TLB")
     bx.set_ylabel('EAT (ns)')
 
-    bx = fig.add_subplot(gs[5,7])
+    bx = fig.add_subplot(gs[5,1])
     bx.scatter(lin_x[5], lin_y[5])
     bx.set_xlabel("TLB")
     bx.set_ylabel('EAT (ns)')
 
-    bx = fig.add_subplot(gs[6,7])
+    bx = fig.add_subplot(gs[5,2])
     bx.scatter(lin_x[6], lin_y[6])
     bx.set_xlabel("TLB")
     bx.set_ylabel('EAT (ns)')
 
-    bx = fig.add_subplot(gs[7,7])
+    bx = fig.add_subplot(gs[5,3])
     bx.scatter(lin_x[7], lin_y[7])
     bx.set_xlabel("TLB")
     bx.set_ylabel('EAT (ns)')
 
-    fig.subplots_adjust(hspace=1.5)
+#    fig.subplots_adjust(hspace=1.5)
     #fig.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=None, hspace=None)
+    #plt.tight_layout()
     plt.show()
