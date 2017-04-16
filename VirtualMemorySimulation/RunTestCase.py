@@ -6,11 +6,10 @@ refs = []
 
 if __name__ == "__main__":
     executables = sys.argv[1]  # Location of executable
-    fres = open("endresult.txt", "w")
     i = 0;
     while (i < 3):
-#         print "Data %s" % (i)
-        fres.write("Data %s\n" % (i))
+        fname = "endresult%s.txt" % (i)
+        fres = open(fname, "w")
         addressfile = "src/misc/data%s%s" % (i, "/addresses.txt")
         j = 2
         while (j <= 256):
