@@ -60,5 +60,6 @@ extern char BACKING_STORE_FILE[256];
 extern bool VERIFY_FRAME;
 extern char TEST_INPUT[256];
 extern char TEST_VALIDATION_DATA[256];
+extern bool SIMPLE_OUTPUT;
 
 #endif /* CONSTANT_H_ */

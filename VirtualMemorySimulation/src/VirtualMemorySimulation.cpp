@@ -16,14 +16,26 @@ using namespace std;
 
 void printStats(VM::Result &result)
 {
-	cout << "TLB Hit: " << result.getTLBStats().hitCount
-			<< " Miss: " << result.getTLBStats().missCount << endl;
-	cout << "PT Hit: " << result.getPtStats().hitCount
-			<< " Miss: " << result.getPtStats().missCount << endl;
-	cout << "Total Time: " << totalTime(result) << endl;
-	cout << "Number of Fetches: " << result.count() << endl;
-	cout << "Effective Access Time: " << fixed << setprecision(3) <<
-			totalTime(result)/result.count() << "ns" << endl;
+	if(SIMPLE_OUTPUT == false) {
+		cout << "TLB Hit: " << result.getTLBStats().hitCount
+				<< " Miss: " << result.getTLBStats().missCount << endl;
+		cout << "PT Hit: " << result.getPtStats().hitCount
+				<< " Miss: " << result.getPtStats().missCount << endl;
+		cout << "Total Time: " << totalTime(result) << endl;
+		cout << "Number of Fetches: " << result.count() << endl;
+		cout << "Effective Access Time: " << fixed << setprecision(3) <<
+				totalTime(result)/result.count() << "ns" << endl;
+	} else {
+		//fields: TLB_size, PT_size, TLB_hit, TLB_miss, PT_hit, PT_miss, total_time, fetches_num, EAT
+		cout << TLB_ENTRY << " " << PAGE_TABLE_ENTRY_COUNT << " "
+			 << result.getTLBStats().hitCount << " "
+			 << result.getTLBStats().missCount << " "
+		     << result.getPtStats().hitCount << " "
+			 << result.getPtStats().missCount << " "
+			 << totalTime(result) << " "
+			 << result.count() << " "
+			 << fixed << setprecision(3) << totalTime(result)/result.count() << endl;
+	}
 }
 
 void printUsage()
@@ -35,11 +47,13 @@ void printUsage()
 	cout << "\t h, help\t- print this dialog\n";
 	cout << "\t b, bs\t\t- specify non-default backing storage [Default: BACKING_STORAGE.bin]\n";
 	cout << "\t f, cmpframe\t- enable frame number comparison(test data must support that) [Default: N]\n";
+	cout << "\t s, simpleout\t- print simplified output(only numbers) that is easier to parse further\n";
+	cout << "\nDescription: simpleout columns: TLB_size, PT_size, TLB_hit, TLB_miss, PT_hit, PT_miss, total_time, fetches_num, EAT\n";
 }
 
 int processArguments(int argc, char **argv)
 {
-	const char* const shortoptions = "t:p:v:hb:f:";
+	const char* const shortoptions = "t:p:v:hb:f:s";
 
 	const struct option long_options[] = {
 			{"tlb", required_argument, NULL, 't'},
@@ -48,6 +62,7 @@ int processArguments(int argc, char **argv)
 			{"help", no_argument, NULL, 'h'},
 			{"bs", required_argument, NULL, 'b'},
 			{"cmpframe", required_argument, NULL, 'f'},
+			{"simpleout", no_argument, NULL, 's'},
 			{NULL, 0, NULL, 0}
 	};
 
@@ -109,6 +124,9 @@ int processArguments(int argc, char **argv)
 				}
 			}
 			break;
+		case 's':
+			SIMPLE_OUTPUT = true;
+			break;
 		case -1:
 			break;
 		default:
@@ -152,20 +170,24 @@ int main(int argc, char **argv)
 				cout << "Comparing with control data: ";
 
 				VM::Result controlData(VM::controlDataFromFile(TEST_VALIDATION_DATA));
-				if(controlData == result) {
-					cout << "MATCH!\n";
-				} else {
-					cout << "MISSMATCH!\n";
+				if(SIMPLE_OUTPUT == false) {
+					if(controlData == result) {
+						cout << "MATCH!\n";
+					} else {
+						cout << "MISSMATCH!\n";
+					}
 				}
 			} else {
-				//print on screen
-				std::cout << "OK\n";
-				for(VM::Result::size_type i=0; i<result.count(); ++i) {
-					VM::Result::Itm itm = result.item(i);
-					cout << "Virtual address: " << itm.vAddr
-							<< " Physical address: " << itm.pAddr
-							<< " Value: " << (int)itm.value
-							<< endl;
+				if(SIMPLE_OUTPUT == false) {
+					//print on screen
+					std::cout << "OK\n";
+					for(VM::Result::size_type i=0; i<result.count(); ++i) {
+						VM::Result::Itm itm = result.item(i);
+						cout << "Virtual address: " << itm.vAddr
+							 << " Physical address: " << itm.pAddr
+							 << " Value: " << (int)itm.value
+							 << endl;
+					}
 				}
 			}
 

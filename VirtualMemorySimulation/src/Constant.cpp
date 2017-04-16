@@ -7,3 +7,5 @@ char BACKING_STORE_FILE[256] = "BACKING_STORE.bin";
 
 char TEST_INPUT[256] = "";
 char TEST_VALIDATION_DATA[256] = "";
+
+bool SIMPLE_OUTPUT = false;
