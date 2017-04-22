@@ -1,5 +1,6 @@
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
+import matplotlib
 import sys
 import math
 from matplotlib import gridspec
@@ -34,9 +35,8 @@ with open(filename, 'r') as f:
             lin_x[int(val_x)-1].append(val_y)
             lin_y[int(val_x)-1].append(val_z)
     
-    fig = plt.figure()
-    gs = gridspec.GridSpec(6,4)
-    ax = fig.add_subplot(gs[0:3,0:3], projection='3d')
+    fig = plt.figure(1)
+    ax = fig.add_subplot(111, projection='3d')
     ax.invert_yaxis()
 
     ax.scatter(x, y, z, c='r', marker='o')
@@ -47,47 +47,62 @@ with open(filename, 'r') as f:
     ax.set_ylabel('TLB(log2(size))')
     ax.set_zlabel('EAT (ns)')
 
-    bx = fig.add_subplot(gs[4,0])
-    bx.scatter(lin_x[0], lin_y[0])
-    bx.set_xlabel("TLB")
-    bx.set_ylabel('EAT (ns)')
+    fig = plt.figure(2)
 
-    bx = fig.add_subplot(gs[4,1])
+    for i in range(0,8):
+        bx = fig.add_subplot(241+i)
+        bx.scatter(lin_x[i], lin_y[i])
+        bx.set_xlabel("TLB")
+        bx.set_ylabel('EAT (ns)')
+        plt.xticks(range(0,10))
+        #bx.yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter(useOffset=True))
+        #bx.ticklabel_format(useOffset=True)
+        bx.get_yaxis().get_major_formatter().set_useOffset(True)
+
+    plt.show()
+
+'''
+    bx = fig.add_subplot(242)
     bx.scatter(lin_x[1], lin_y[1])
     bx.set_xlabel("TLB")
     bx.set_ylabel('EAT (ns)')
+    plt.xticks(range(0,10))
+    bx.yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter(useOffset=True))
 
-    bx = fig.add_subplot(gs[4,2])
+    bx = fig.add_subplot(243)
     bx.scatter(lin_x[2], lin_y[2])
     bx.set_xlabel("TLB")
     bx.set_ylabel('EAT (ns)')
+    plt.xticks(range(0,10))
 
-    bx = fig.add_subplot(gs[4,3])
+    bx = fig.add_subplot(244)
     bx.scatter(lin_x[3], lin_y[3])
     bx.set_xlabel("TLB")
     bx.set_ylabel('EAT (ns)')
+    plt.xticks(range(0,10))
 
-    bx = fig.add_subplot(gs[5,0])
+    bx = fig.add_subplot(245)
     bx.scatter(lin_x[4], lin_y[4])
     bx.set_xlabel("TLB")
     bx.set_ylabel('EAT (ns)')
+    plt.xticks(range(0,10))
 
-    bx = fig.add_subplot(gs[5,1])
+    bx = fig.add_subplot(246)
     bx.scatter(lin_x[5], lin_y[5])
     bx.set_xlabel("TLB")
     bx.set_ylabel('EAT (ns)')
+    plt.xticks(range(0,10))
 
-    bx = fig.add_subplot(gs[5,2])
+    bx = fig.add_subplot(247)
     bx.scatter(lin_x[6], lin_y[6])
     bx.set_xlabel("TLB")
     bx.set_ylabel('EAT (ns)')
+    plt.xticks(range(0,10))
 
-    bx = fig.add_subplot(gs[5,3])
+    bx = fig.add_subplot(248)
     bx.scatter(lin_x[7], lin_y[7])
     bx.set_xlabel("TLB")
     bx.set_ylabel('EAT (ns)')
+    plt.xticks(range(0,10))
+'''
 
-#    fig.subplots_adjust(hspace=1.5)
-    #fig.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=None, hspace=None)
-    #plt.tight_layout()
-    plt.show()
